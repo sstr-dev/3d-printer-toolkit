@@ -1,10 +1,12 @@
 #!/bin/sh
 
-show_project_information() {
-    menu_line '3D printer applications, maintenance, and customization.'
-    # TODO: Version, url
-    
-}
+show_project_information() (
+    project_version=$(git -C "$PROJECT_ROOT" describe --tags --always --dirty 2>/dev/null) || project_version=''
+    project_url=$(git -C "$PROJECT_ROOT" config --get remote.origin.url 2>/dev/null) || project_url=''
+
+    system_line 'Version:' "${project_version:-Unavailable}"
+    system_line 'URL:' "${project_url:-Unavailable}"
+)
 
 show_os_information() (
     detect_system_information
@@ -26,8 +28,6 @@ show_printer_information() (
     system_line 'Serial number:' "${PRINTER_SN:-Unavailable}"
     system_line 'Firmware:' "${PRINTER_VERSION:-Unavailable}"
     system_line 'IP addresses:' "${PRINTER_IPS:-Unavailable}"
-    
-    #system_line 'Configuration:' "$CONFIG_DIR"
 
     subtitle '•ESSENTIALS:'
     info_line "$(check_folder_menu "$MOONRAKER_FOLDER")" 'Moonraker & Nginx'
@@ -87,4 +87,7 @@ show_information() {
     outer_line
 }
 
-register_action 'Printer, OS and Project Info' show_information
+register_action 'Show all Informations' show_information
+register_action 'Show Printer Informations' show_printer_information
+register_action 'Show OS Informations' show_os_information
+register_action 'Show Project Informations' show_project_information
