@@ -13,7 +13,7 @@ guppy_screen_install() {
         error_msg "Guppy Screen is already installed!"
     elif [ ! -d "$MOONRAKER_FOLDER" ] && [ ! -d "$NGINX_FOLDER" ]; then
         error_msg "Moonraker and Nginx are needed, please install them first!"
-    elif [ "$(curl -s localhost:7125/server/info | jq .result.klippy_connected)" != "true" ]; then
+    elif [ "$($CURL -s localhost:7125/server/info | jq .result.klippy_connected)" != "true" ]; then
         error_msg "Moonraker and Klipper do not seem to be functional. Please check this!"
     elif [ ! -f /lib/ld-2.29.so ]; then
         error_msg "Make sure you're running latest firmware version!"
