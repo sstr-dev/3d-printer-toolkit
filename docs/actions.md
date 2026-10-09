@@ -19,7 +19,7 @@ Model names are case-sensitive. An action for another model is skipped. Registra
 
 ## Run an action
 
-The selected function or script always receives its category as `$1`. Moonraker uses `install` or `remove` to choose the operation. Scripts such as `install-nginx.sh` can ignore it. There is no extra argument to configure.
+The selected function or script always receives its category as `$1`. As example Moonraker uses `install` or `remove` to choose the operation. Scripts such as `install-xyz.sh` can ignore it. 
 
 Actions run in a subshell with the toolkit's helpers and settings available. Variable changes stay inside that shell; file changes persist. Scripts should check `TOOLKIT_READY=1` and be started through the menu.
 
@@ -28,10 +28,6 @@ Return `0` for success and a nonzero status for failure. Status `130` exits the 
 See [application registrations](../menue/20-applications.sh) and the [Info action](../menue/10-information.sh) for existing usage.
 
 Self Update calls `update_menu` directly. Although `update` is a valid category, extra actions registered there are not displayed by the main menu.
-
-## Function comments
-
-Shell functions have no built-in docstring format. This project uses short `#` comment blocks directly above its main functions. They describe the purpose, arguments, return status, and shared variables where useful. These comments need no documentation tool.
 
 ## Shared helpers
 
@@ -57,6 +53,3 @@ Shell functions have no built-in docstring format. This project uses short `#` c
 | `apply_self_update` | Requires a clean checkout, merges `UPDATE_TARGET` with `--ff-only`, and makes `main.sh` executable |
 | `update_menu` | Checks availability, asks for confirmation, and applies an update; returns `130` when exiting |
 
-Both navigation modes use `menu_header`, `menu_option`, and border helpers. Presentation helpers write to stderr so selection output can be captured separately. Menu styling uses `MENU_WIDTH` (default `64`, valid range `20`–`200`), `MENU_OUTER_CHAR` (default `=`), and `MENU_INNER_CHAR` (default `-`). Setting `NO_COLOR` disables named colors in `menu_line`.
-
-`set_permissions` starts a background permission update for the executable referenced by `CURL`, if configured for a non-generic model. It does nothing for `generic` or when `CURL` is empty; background failures are not reported to the caller.

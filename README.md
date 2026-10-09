@@ -1,16 +1,14 @@
 # 3D Printer Toolkit
 
-A modular shell toolkit for Creality printer maintenance, configuration, and application setup, inspired by **Creality Helper Script**.
+A modular shell toolkit for my 3D printers. It includes application setup, maintenance, and customization, inspired by the popular **Creality Helper Script**.
 
 ## Why this project exists
 
-I built this toolkit for my own 3D printers. It brings application setup, maintenance, and customization into one menu and can grow with the tools I use. Moonraker is one of the planned integrations.
-
-The intended runtime is POSIX `/bin/sh` on BusyBox-based printers. The primary target is the pre-2025 Creality K1C; generic development and K1 series 2025 paths are also defined. Model entries do not imply tested hardware support.
+I built this toolkit for my own 3D printers. It brings application setup, maintenance, and customization into one menu and can grow with the tools I use. 
 
 ## Current status
 
-This is work in progress. Moonraker and nginx installation/removal, configuration backup, and hostname customization currently display placeholder messages. Information display, menu registration, and Git update handling have implementations; hardware validation is still needed.
+This is work in progress. 
 
 ## Usage
 
@@ -22,9 +20,9 @@ Menus use numbered prompts by default, with a shared header, bordered options, a
 | --- | --- |
 | 1 | Install / Update |
 | 2 | Remove |
-| 3 | Info |
-| 4 | Tools |
-| 5 | Customize |
+| 3 | Tools |
+| 4 | Customize |
+| 5 | Info |
 | 6 | Self Update, only when an update is detected |
 | 0 | Exit |
 
