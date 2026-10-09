@@ -476,6 +476,11 @@ fi
 #menu_option '13' 'Install' 'Start Print Calibration'
 
 
+# CUSTOMIZATION
+register_action "$(check_folder_action "$GUPPY_SCREEN_FOLDER")"'Guppy Screen' "$S_ACTIONS/guppy_screen.sh" install 'K1 K1C'
+if check_folder "$GUPPY_SCREEN_FOLDER"; then
+    register_action "$(check_folder_action "$GUPPY_SCREEN_FOLDER")"'Guppy Screen' "$S_ACTIONS/guppy_screen.sh" remove 'K1 K1C'
+fi
 
 
 

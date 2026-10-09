@@ -57,7 +57,6 @@ block_creality_cloud()
     fi
 }
 
-# TODO: not ready
 creality_web_interface()
 {
     if [ -f "$CREALITY_WEB_FILE" ]; then
@@ -125,12 +124,10 @@ creality_web_interface()
     fi
 }
 
-register_action "$(check_file_action "$CLOUD_BLOCK_SERVICE_FILE")"'Block Creality Cloud Telemetry' block_creality_cloud customize 'K1C generic'
-register_action "$(check_file_action "$CREALITY_WEB_FILE")"'Creality Web Interface' creality_web_interface customize 'K1C'
+
+register_action "$(check_file_action "$CREALITY_WEB_FILE")"'Creality Web Interface' creality_web_interface customize 'K1 K1C'
+register_action "$(check_file_action "$CLOUD_BLOCK_SERVICE_FILE")"'Block Creality Cloud Telemetry' block_creality_cloud customize 'K1 K1C'
 
 #subtitle '•CUSTOMIZATION:'
 #info_line "$(check_file_action "$BOOT_DISPLAY_FILE")" 'Custom Boot Display'
-#info_line "$(check_file_action "$CREALITY_WEB_FILE")" 'Creality Web Interface'
-#info_line "$(check_folder_action "$GUPPY_SCREEN_FOLDER")" 'Guppy Screen'
 #info_line "$(check_file_action "$FLUIDD_LOGO_FILE")" 'Creality Dynamic Logos for Fluidd'
-#info_line "$(check_file_action "$CLOUD_BLOCK_SERVICE_FILE")" 'Block Creality Cloud Telemetry'
