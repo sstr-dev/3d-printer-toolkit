@@ -61,11 +61,11 @@ kamp_install() {
                     else
                         echo -e "Info: [virtual_pins] configuration is already enabled in printer.cfg file..."
                     fi
-                    if grep -q "include Helper-Script/KAMP/KAMP_Settings" "$PRINTER_CFG" ; then
+                    if grep -q "include 3dp-toolkit/KAMP/KAMP_Settings" "$PRINTER_CFG" ; then
                         echo -e "Info: KAMP configurations are already enabled in printer.cfg file..."
                     else
                         echo -e "Info: Adding KAMP configurations in printer.cfg file..."
-                        sed -i '/\[include printer_params\.cfg\]/a [include Helper-Script/KAMP/KAMP_Settings.cfg]' "$PRINTER_CFG"
+                        sed -i '/\[include printer_params\.cfg\]/a [include 3dp-toolkit/KAMP/KAMP_Settings.cfg]' "$PRINTER_CFG"
                     fi
                     if grep -q "\[gcode_macro START_PRINT\]" "$MACROS_CFG" ; then
                         echo -e "Info: Disabling [gcode_macro START_PRINT] in gcode_macro.cfg file..."
@@ -129,9 +129,9 @@ kamp_remove() {
                 else
                     echo -e "Info: [virtual_pins] configuration is already removed in printer.cfg file..."
                 fi
-                if grep -q "include Helper-Script/KAMP/KAMP_Settings" "$PRINTER_CFG" ; then
+                if grep -q "include 3dp-toolkit/KAMP/KAMP_Settings" "$PRINTER_CFG" ; then
                     echo -e "Info: Removing KAMP configurations in printer.cfg file..."
-                    sed -i '/include Helper-Script\/KAMP\/KAMP_Settings\.cfg/d' "$PRINTER_CFG"
+                    sed -i '/include 3dp-toolkit\/KAMP\/KAMP_Settings\.cfg/d' "$PRINTER_CFG"
                 else
                     echo -e "Info: KAMP configurations are already removed in printer.cfg file..."
                 fi

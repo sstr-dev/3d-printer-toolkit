@@ -108,12 +108,69 @@ set_paths() {
     KLIPPER_GCODE_URL="${S_FILES}/fixes/gcode.py"
     KLIPPER_GCODE_3V3_URL="${S_FILES}/fixes/gcode_3v3.py"
 
+    # Klipper Gcode Shell Command #
+    KLIPPER_SHELL_FILE="${KLIPPER_EXTRAS_FOLDER}/gcode_shell_command.py"
+    KLIPPER_SHELL_URL="${S_FILES}/gcode-shell-command/gcode_shell_command.py"
+
+    # Extended Gcode Params #
+    EXTENDED_GCODE_PARAMS_FILE="${KLIPPER_EXTRAS_FOLDER}/extended_gcode_params.py"
+    EXTENDED_GCODE_PARAMS_URL="${S_FILES}/extended-gcode-params/extended_gcode_params.py"
+
     # Klipper Adaptive Meshing & Purging #
     KAMP_FOLDER="${S_CONFIG_FOLDER}/KAMP"
     KAMP_URL="${S_FILES}/kamp"
     VIRTUAL_PINS_FILE="${KLIPPER_EXTRAS_FOLDER}/virtual_pins.py"
     VIRTUAL_PINS_URL="${S_FILES}/klipper-virtual-pins/virtual_pins.py"
 
+    # Buzzer Support #
+    BUZZER_FILE="${S_CONFIG_FOLDER}/buzzer-support.cfg"
+    BUZZER_URL="${S_FILES}/buzzer-support/buzzer-support.cfg"
+    
+    # Nozzle Cleaning Fan Control #
+    NOZZLE_CLEANING_FOLDER="${KLIPPER_EXTRAS_FOLDER}/prtouch_v2_fan"
+    NOZZLE_CLEANING_URL1="${S_FILES}/nozzle-cleaning-fan-control/__init__.py"
+    NOZZLE_CLEANING_URL2="${S_FILES}/nozzle-cleaning-fan-control/prtouch_v2_fan.pyc"
+    NOZZLE_CLEANING_URL3="${S_FILES}/nozzle-cleaning-fan-control/nozzle-cleaning-fan-control.cfg"
+    
+    # Fans Control Macros #
+    FAN_CONTROLS_FILE="${S_CONFIG_FOLDER}/fans-control.cfg"
+    FAN_CONTROLS_URL="${S_FILES}/macros/fans-control.cfg"
+    
+    # Improved Shapers Calibrations #
+    IMP_SHAPERS_FOLDER="${S_CONFIG_FOLDER}/improved-shapers"
+    IMP_SHAPERS_URL="${S_FILES}/improved-shapers"
+
+    # Restore Input Shapers (K1C 2025) #
+    RESTORE_SHAPERS_URL="${S_FILES}/restore-input-shapers/shaper_defs.py"
+    SHAPER_DEFS_FILE="${KLIPPER_EXTRAS_FOLDER}/shaper_defs.py"
+
+
+    # Useful Macros #
+    USEFUL_MACROS_FILE="${S_CONFIG_FOLDER}/useful-macros.cfg"
+    USEFUL_MACROS_URL="${S_FILES}/macros/useful-macros.cfg"
+    USEFUL_MACROS_3V3_URL="${S_FILES}/macros/useful-macros-3v3.cfg"
+
+    # M600 Support #
+    M600_SUPPORT_FILE="${S_CONFIG_FOLDER}/M600-support.cfg"
+    M600_SUPPORT_URL="${S_FILES}/macros/M600-support.cfg"
+    M600_SUPPORT_3V3_URL="${S_FILES}/macros/M600-support-3v3.cfg"
+    M600_SUPPORT_3KE_URL="${S_FILES}/macros/M600-support-ke.cfg"
+    
+    # Git Backup #
+    GIT_BACKUP_INSTALLER="${S_FILES}/git-backup/git-backup.sh"
+    GIT_BACKUP_FILE="${S_CONFIG_FOLDER}/git-backup.cfg"
+    GIT_BACKUP_URL="${S_FILES}/git-backup/git-backup.cfg"
+    
+    # Moonraker Timelapse #
+    TIMELAPSE_FILE="${USR_DATA}/moonraker/moonraker/moonraker/components/timelapse.py"
+    TIMELAPSE_URL1="${S_FILES}/moonraker-timelapse/timelapse.py"
+    TIMELAPSE_URL2="${S_FILES}/moonraker-timelapse/timelapse.cfg"
+    
+    # Camera Settings Control #
+    CAMERA_SETTINGS_FILE="${S_CONFIG_FOLDER}/camera-settings.cfg"
+    CAMERA_SETTINGS_URL="${S_FILES}/camera-settings/camera-settings.cfg"
+    CAMERA_SETTINGS_NEBULA_URL="${S_FILES}/camera-settings/camera-settings-nebula.cfg"
+    CAMERA_SETTINGS_K1_2025_URL="${S_FILES}/camera-settings/camera-settings-k1c-2025.cfg"
 
     # Creality Web Interface #
     CREALITY_WEB_FILE="${BIN_FOLDER}/web-server"
@@ -131,6 +188,13 @@ set_paths() {
     CLOUD_BLOCK_SERVICE_URL="${S_FILES}/services/S995cloudblock"
     CLOUD_BLOCK_SERVICE_FILE="${INITD_FOLDER}/S995cloudblock"
     #APPLICATIONS_DIR=${APPLICATIONS_DIR:-"$DATA_ROOT"}
+
+    # Guppy Screen #
+    GUPPY_SCREEN_FOLDER="${USR_DATA}/guppyscreen"
+    GUPPY_SCREEN_URL1="${S_FILES}/guppy-screen/guppy_update.cfg"
+    GUPPY_SCREEN_URL2="${S_FILES}/guppy-screen/guppy-update.sh"
+    GUPPY_SCREEN_3V3_URL="${S_FILES}/guppy-screen/guppy_update-3v3.cfg"
+    GUPPY_SCREEN_CONFIG_3V3_URL="${S_FILES}/guppy-screen/guppyconfig-3v3.json"
 
 }
 
