@@ -26,7 +26,49 @@ show_printer_information() (
     system_line 'Serial number:' "${PRINTER_SN:-Unavailable}"
     system_line 'Firmware:' "${PRINTER_VERSION:-Unavailable}"
     system_line 'IP addresses:' "${PRINTER_IPS:-Unavailable}"
-    system_line 'Configuration:' "$CONFIG_DIR"
+    
+    #system_line 'Configuration:' "$CONFIG_DIR"
+
+    subtitle '•ESSENTIALS:'
+    info_line "$(check_folder_menu "$MOONRAKER_FOLDER")" 'Moonraker & Nginx'
+    info_line "$(check_folder_menu "$FLUIDD_FOLDER")" 'Fluidd'
+    info_line "$(check_folder_menu "$MAINSAIL_FOLDER")" 'Mainsail'
+    hr
+    subtitle '•UTILITIES:'
+    info_line "$(check_file_menu "$ENTWARE_FILE")" 'Entware'
+    info_line "$(check_file_menu "$KLIPPER_SHELL_FILE")" 'Klipper Gcode Shell Command'
+    hr
+    subtitle '•IMPROVEMENTS:'
+    info_line "$(check_folder_menu "$KAMP_FOLDER")" 'Klipper Adaptive Meshing & Purging'
+    info_line "$(check_file_menu "$BUZZER_FILE")" 'Buzzer Support'
+    info_line "$(check_folder_menu "$NOZZLE_CLEANING_FOLDER")" 'Nozzle Cleaning Fan Control'
+    info_line "$(check_file_menu "$FAN_CONTROLS_FILE")" 'Fans Control Macros' 
+    info_line "$(check_folder_menu "$IMP_SHAPERS_FOLDER")" 'Improved Shapers Calibrations'
+    info_line "$(check_file_menu "$USEFUL_MACROS_FILE")" 'Useful Macros'
+    info_line "$(check_file_menu "$SAVE_ZOFFSET_FILE")" 'Save Z-Offset Macros'
+    info_line "$(check_file_menu "$SCREWS_ADJUST_FILE")" 'Screws Tilt Adjust Support'
+    info_line "$(check_file_menu "$M600_SUPPORT_FILE")" 'M600 Support'
+    info_line "$(check_file_menu "$GIT_BACKUP_FILE")" 'Git Backup'
+    hr
+    subtitle '•CAMERA:'
+    info_line "$(check_file_menu "$TIMELAPSE_FILE")" 'Moonraker Timelapse'
+    info_line "$(check_file_menu "$CAMERA_SETTINGS_FILE")" 'Camera Settings Control'
+    #info_line "$(check_file_menu "$USB_CAMERA_FILE")" 'USB Camera Support'
+    hr
+    subtitle '•REMOTE ACCESS:'
+    #info_line "$(check_folder_menu "$OCTOEVERYWHERE_FOLDER")" 'OctoEverywhere'
+    #info_line "$(check_folder_menu "$MOONRAKER_OBICO_FOLDER")" 'Obico'
+    #info_line "$(check_folder_menu "$GUPPYFLO_FOLDER")" 'GuppyFLO'
+    #info_line "$(check_folder_menu "$MOBILERAKER_COMPANION_FOLDER")" 'Mobileraker Companion'
+    #info_line "$(check_folder_menu "$OCTOAPP_COMPANION_FOLDER")" 'OctoApp Companion'
+    info_line "$(check_moonraker_component_menu "simplyprint")" 'SimplyPrint'
+    hr
+    subtitle '•CUSTOMIZATION:'
+    #info_line "$(check_file_menu "$BOOT_DISPLAY_FILE")" 'Custom Boot Display'
+    info_line "$(check_file_menu "$CREALITY_WEB_FILE")" 'Creality Web Interface'
+    info_line "$(check_folder_menu "$GUPPY_SCREEN_FOLDER")" 'Guppy Screen'
+    #info_line "$(check_file_menu "$FLUIDD_LOGO_FILE")" 'Creality Dynamic Logos for Fluidd'
+    info_line "$(check_file_menu "$CLOUD_BLOCK_SERVICE_FILE")" 'Block Creality Cloud Telemetry'
 )
 
 show_information() {

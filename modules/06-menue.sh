@@ -27,6 +27,7 @@ menu_run() (
     esac
 )
 
+
 # Styling helpers write to stderr so menu selections remain machine-readable.
 hr() (
     line_width=${MENU_WIDTH:-64}
@@ -66,7 +67,21 @@ menu_line() (
     fi
     printf '| %s%-*.*s%s |\n' "$line_color" "$line_width" "$line_width" "$1" "$line_reset" >&2
 )
-
+subtitle() {
+  local menu_text1=$1
+  local max_length=63
+  local padding=$((max_length - ${#menu_text1}))
+  printf "│ ${blue}${menu_text1}%-${padding}s${white}│\n" ''
+}
+info_line() {
+  local status=$1
+  local text=$2
+  local color=$3
+  local max_length=68
+  local total_text_length=$(( ${#status} + ${#text} ))
+  local padding=$((max_length - total_text_length))
+  printf "│   $color${status} ${white}${text}%-${padding}s${white}│\n" ''
+}
 system_line() (
     case "${2:-}" in ''|Unavailable|unknown|N/A) return 0 ;; esac
     line_width=${MENU_WIDTH:-64}
@@ -187,6 +202,76 @@ menu_pause() {
     [ -t 0 ] || return 0
     printf '\nPress Enter to continue... '
     IFS= read -r menu_continue || return 130
+}
+
+install_msg() {
+  read -p "${white} Are you sure you want to install ${green}${1} ${white}? (${yellow}y${white}/${yellow}n${white}): ${yellow}" $2
+}
+
+update_msg() {
+  read -r -p "${white} ${green}${1}${white} already installed, update? (${yellow}y${white}/${yellow}n${white}): ${yellow}" "$2"
+}
+
+remove_msg() {
+  read -p "${white} Are you sure you want to remove ${green}${1} ${white}? (${yellow}y${white}/${yellow}n${white}): ${yellow}" $2
+}
+
+disable_msg() {
+  read -p "${white} Are you sure you want to disable ${green}${1} ${white}? (${yellow}y${white}/${yellow}n${white}): ${yellow}" $2
+}
+
+restore_msg() {
+  read -p "${white} Are you sure you want to restore ${green}${1} ${white}? (${yellow}y${white}/${yellow}n${white}): ${yellow}" $2
+}
+
+backup_msg() {
+  read -p "${white} Are you sure you want to backup ${green}${1} ${white}? (${yellow}y${white}/${yellow}n${white}): ${yellow}" $2
+}
+
+restart_msg() {
+  read -p "${white} Are you sure you want to restart ${green}${1} ${white}? (${yellow}y${white}/${yellow}n${white}): ${yellow}" $2
+}
+
+ok_msg() {
+  echo
+  echo -e "${white}${green} ✓ ${1}${white}"
+  echo
+}
+
+warn_msg() {
+  echo
+  echo -e "${white}${yellow} ⚠ ${1}${white}"
+  echo
+}
+
+error_msg() {
+  echo
+  echo -e "${white}${darkred} ✗ ${1}${white}"
+  echo
+}
+
+check_folder_menu() {
+  if check_folder "$1"; then
+    echo -e "${green}✓"
+  else
+    printf '%s✗\n' "$red"
+  fi
+}
+
+check_file_menu() {
+  if check_file "$1"; then
+    echo -e "${green}✓"
+  else
+    echo -e "${red}✗"
+  fi
+}
+
+check_moonraker_component_menu() {
+  if check_moonraker_component "${1:-}"; then
+    echo -e "${green}✓"
+  else
+    echo -e "${red}✗"
+  fi
 }
 
 # Show registered actions in a category and run the selected target.

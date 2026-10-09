@@ -4,6 +4,7 @@ Built for my own 3D printers, the toolkit separates shared helpers, menu registr
 
 - [Action API and shared functions](actions.md)
 - [Configuration and updates](configuration.md)
+- [Binary files](bin-files.md)
 - [Project overview](../README.md)
 
 ## Startup lifecycle

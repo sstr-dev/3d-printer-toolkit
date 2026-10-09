@@ -13,7 +13,7 @@ strikethrough=$(printf '\033[9m')
 # Set printer paths from PRINTER_MODEL and optional path overrides.
 # Sets: USR_DATA, USR_SHARE, INITD_FOLDER, BIN_FOLDER, PRINTER_DATA_FOLDER,
 # PRINTER_DATA_CONFIG_FOLDER, PRINTER_DATA_LOG_FOLDER, S_FILES, S_ACTIONS.
-# Does not create directories.
+# Creates project-local system directories for generic printers.
 set_paths() {
     case "$PRINTER_MODEL" in
         K1C) 
@@ -37,12 +37,41 @@ set_paths() {
     PRINTER_DATA_CONFIG_FOLDER=${PRINTER_DATA_CONFIG_FOLDER:-"$PRINTER_DATA_FOLDER/config"}
     PRINTER_DATA_LOG_FOLDER=${PRINTER_DATA_LOG_FOLDER:-"$PRINTER_DATA_FOLDER/logs"}
 
+    # Configuration Files #
+    MOONRAKER_CFG="${PRINTER_DATA_CONFIG_FOLDER}/moonraker.conf"
+    PRINTER_CFG="${PRINTER_DATA_CONFIG_FOLDER}/printer.cfg"
+    MACROS_CFG="${PRINTER_DATA_CONFIG_FOLDER}/gcode_macro.cfg"
+  
     # Printer Script #
     S_FILES="${PROJECT_ROOT}/files"
     S_ACTIONS="${PROJECT_ROOT}/actions"
 
     # System #
-    # CURL="${S_FILES}/fixes/curl"
+    if [ "$PRINTER_MODEL" != "generic" ]; then
+        CURL="${S_FILES}/fixes/curl"
+    else
+        CURL=$(command -v curl)
+        for dir in "$USR_DATA" "$USR_SHARE" "$INITD_FOLDER" "$BIN_FOLDER"; do
+            case "$dir" in
+                "${PROJECT_ROOT%/}"/*)
+                    [ -d "$dir" ] || mkdir -p -- "$dir"
+                    ;;
+            esac
+        done
+    fi
+
+    # path per application..
+
+    # Entware #
+    #ENTWARE_FILE="/opt/bin/opkg"
+    #ENTWARE_URL="${HS_FILES}/entware/generic.sh"
+    #ENTWARE_OPT_MOUNT="${USR_DATA}/entware_opt_mount.img"
+
+    # Moonraker #
+
+    # Klipper #
+
+
 
 
     #APPLICATIONS_DIR=${APPLICATIONS_DIR:-"$DATA_ROOT"}
@@ -58,3 +87,18 @@ set_permissions() {
         fi
     fi
 }
+
+check_folder() {
+  [ -d "$1" ]
+}
+
+check_file() {
+  [ -f "$1" ]
+}
+
+check_moonraker_component() {
+  [ -n "${1:-}" ] && [ -r "$MOONRAKER_CFG" ] || return 1
+  grep -Fq "[$1]" "$MOONRAKER_CFG"
+}
+
+
