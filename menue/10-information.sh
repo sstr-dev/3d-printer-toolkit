@@ -46,8 +46,8 @@ show_printer_information() (
     info_line "$(check_folder_menu "$IMP_SHAPERS_FOLDER")" 'Improved Shapers Calibrations'
     info_line "$(check_file_menu "$USEFUL_MACROS_FILE")" 'Useful Macros'
     info_line "$(check_file_menu "$SAVE_ZOFFSET_FILE")" 'Save Z-Offset Macros'
-    info_line "$(check_file_menu "$SCREWS_ADJUST_FILE")" 'Screws Tilt Adjust Support'
-    info_line "$(check_file_menu "$M600_SUPPORT_FILE")" 'M600 Support'
+    #info_line "$(check_file_menu "$SCREWS_ADJUST_FILE")" 'Screws Tilt Adjust Support'
+    #info_line "$(check_file_menu "$M600_SUPPORT_FILE")" 'M600 Support'
     info_line "$(check_file_menu "$GIT_BACKUP_FILE")" 'Git Backup'
     hr
     subtitle '•CAMERA:'
