@@ -1,4 +1,7 @@
 #!/bin/sh
+set -e
+clear
+trap 'echo -en "\033[m"' EXIT INT
 
 PROJECT_ROOT="$(CDPATH= cd -P -- "$(dirname -- "$0")" && pwd)" || exit 1
 readonly PROJECT_ROOT
