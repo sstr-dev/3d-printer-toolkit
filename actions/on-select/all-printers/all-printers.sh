@@ -5,8 +5,8 @@ if [ "${TOOLKIT_READY:-}" != 1 ]; then
     return 1 2>/dev/null || exit 1
 fi
 
-if [ ! -L "$BIN_FOLDER"/3dp ]; then
-  ln -sf "$PROJECT_ROOT"/main.sh "$BIN_FOLDER"/3dp > /dev/null 2>&1
+if [ ! -L "$BIN_FOLDER"/3dptool ]; then
+  ln -sf "$PROJECT_ROOT"/main.sh "$BIN_FOLDER"/3dptool > /dev/null 2>&1
 fi
 
 rm -rf /root/.cache
