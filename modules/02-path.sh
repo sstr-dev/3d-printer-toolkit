@@ -63,11 +63,12 @@ set_paths() {
     # path per application..
 
     # Entware #
-    #ENTWARE_FILE="/opt/bin/opkg"
-    #ENTWARE_URL="${HS_FILES}/entware/generic.sh"
-    #ENTWARE_OPT_MOUNT="${USR_DATA}/entware_opt_mount.img"
+    ENTWARE_FILE="/opt/bin/opkg"
+    ENTWARE_URL="${S_FILES}/entware/generic.sh"
+    ENTWARE_OPT_MOUNT="${USR_DATA}/entware_opt_mount.img"
 
     # Moonraker #
+    
 
     # Klipper #
 
