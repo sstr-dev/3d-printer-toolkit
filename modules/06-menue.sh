@@ -274,12 +274,37 @@ check_moonraker_component_menu() {
   fi
 }
 
+check_folder_action() {
+  if check_folder "$1"; then
+    echo -e "[x] "
+  else
+    echo -e '[ ] '
+  fi
+}
+
+check_file_action() {
+  if check_file "$1"; then
+    echo -e "[x] "
+  else
+    echo -e '[ ] '
+  fi
+}
+
+check_moonraker_component_action() {
+  if check_moonraker_component "${1:-}"; then
+    echo -e "[x] "
+  else
+    echo -e '[ ] '
+  fi
+}
+
 # Show registered actions in a category and run the selected target.
 # Arguments: category, title. Each target receives the category as $1.
 # Returns: 0 on Back, 130 on Exit or input failure.
 show_action_menu() (
     category=$1
     title=$2
+    reload_actions || return 1
     while true; do
         menu_options=''
         index=0
@@ -316,6 +341,8 @@ EOF
             [ "$status" -ne 130 ] || return 130
             if [ "$status" -ne 0 ]; then
                 printf 'Action failed (exit status %d).\n' "$status" >&2
+            else
+                reload_actions || return 1
             fi
             menu_pause || return 130
         else

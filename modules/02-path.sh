@@ -68,13 +68,26 @@ set_paths() {
     ENTWARE_OPT_MOUNT="${USR_DATA}/entware_opt_mount.img"
 
     # Moonraker #
-    
+
 
     # Klipper #
 
 
+    # Creality Web Interface #
+    CREALITY_WEB_FILE="${BIN_FOLDER}/web-server"
 
+    # Creality Stock Services (K1C 2025) #
+    # INITD_FOLDER is already model-branched above; these files only exist on the
+    # K1_2025, and the option using them is only reachable from its Customize menu.
+    CREALITY_TELEMETRY_SERVICE="${INITD_FOLDER}/CS61alchemistp_service"
+    CREALITY_CLOUD_WEBRTC_SERVICE="${INITD_FOLDER}/CS58onyxp_service"
+    CREALITY_LOCAL_WEBRTC_SERVICE="${INITD_FOLDER}/CS59thirteenthp"
+    CREALITY_AI_SERVICE="${INITD_FOLDER}/CS57solusp_service"
+    CREALITY_MDNS_SERVICE="${INITD_FOLDER}/CS99mdns"
 
+    # Block Creality Cloud Telemetry #
+    CLOUD_BLOCK_SERVICE_URL="${S_FILES}/services/S995cloudblock"
+    CLOUD_BLOCK_SERVICE_FILE="${INITD_FOLDER}/S995cloudblock"
     #APPLICATIONS_DIR=${APPLICATIONS_DIR:-"$DATA_ROOT"}
 
 }

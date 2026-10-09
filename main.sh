@@ -36,10 +36,7 @@ readonly TOOLKIT_READY
 run_printer_selection_actions || exit 1
 
 # Load menu actions.
-for script in "$PROJECT_ROOT"/menue/*.sh; do
-    [ -f "$script" ] || continue
-    . "$script" || exit 1
-done
+reload_actions || exit 1
 
 
 # Check for updates before showing the main menu.

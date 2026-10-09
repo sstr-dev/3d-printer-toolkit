@@ -1,5 +1,16 @@
 #!/bin/sh
 
+# Rebuild labels and conditional registrations from the current installed state.
+reload_actions() {
+    local script
+    ACTIONS=''
+    ACTION_COUNT=0
+    for script in "$PROJECT_ROOT"/menue/*.sh; do
+        [ -f "$script" ] || continue
+        . "$script" || return 1
+    done
+}
+
 # Add a menu action, or skip it when the printer model does not match.
 # Arguments: label, function/script, category (default: info), optional models.
 # The menu passes the category to the selected target as $1.
