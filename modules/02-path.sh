@@ -45,6 +45,8 @@ set_paths() {
     # Printer Script #
     S_FILES="${PROJECT_ROOT}/files"
     S_ACTIONS="${PROJECT_ROOT}/actions"
+    S_CONFIG_FOLDER="$PRINTER_DATA_FOLDER/config/3dp-toolkit"
+    S_BACKUP_FOLDER="$USR_DATA/3dp-toolkit-backup"
 
     # System #
     if [ "$PRINTER_MODEL" != "generic" ]; then
@@ -68,9 +70,49 @@ set_paths() {
     ENTWARE_OPT_MOUNT="${USR_DATA}/entware_opt_mount.img"
 
     # Moonraker #
+    MOONRAKER_FOLDER="${USR_DATA}/moonraker"
+    MOONRAKER_ENV_PYTHON="${MOONRAKER_FOLDER}/moonraker-env/bin/python3"
+    MOONRAKER_URL1="${S_FILES}/moonraker/moonraker.tar.gz"
+    MOONRAKER_URL2="${S_FILES}/moonraker/moonraker.conf"
+    MOONRAKER_URL3="${S_FILES}/moonraker/moonraker.asvc"
+    MOONRAKER_SERVICE_URL="${S_FILES}/services/S56moonraker_service"
 
+    # Nginx #
+    NGINX_FOLDER="${USR_DATA}/nginx"
+    NGINX_BIN="${NGINX_FOLDER}/sbin/nginx"
+    NGINX_CONF_FILE="${NGINX_FOLDER}/nginx/nginx.conf"
+    NGINX_URL="${S_FILES}/moonraker/nginx.tar.gz"
+    NGINX_SERVICE_URL="${S_FILES}/services/S50nginx"
+    NGINX_CONF_URL="${S_FILES}/moonraker/nginx.conf"
+
+    # Supervisor Lite #
+    SUPERVISOR_FILE="$BIN_FOLDER/supervisorctl"
+    SUPERVISOR_OPT_FILE="/opt/bin/supervisorctl"
+    SUPERVISOR_URL="${S_FILES}/fixes/supervisorctl"
+
+    # Host Controls Support #
+    SYSTEMCTL_FILE="$BIN_FOLDER/systemctl"
+    SYSTEMCTL_URL="${S_FILES}/fixes/systemctl"
+    SUDO_FILE="$BIN_FOLDER/sudo"
+    SUDO_URL="${S_FILES}/fixes/sudo"
 
     # Klipper #
+    KLIPPER_EXTRAS_FOLDER="/usr/share/klipper/klippy/extras"
+    KLIPPER_CONFIG_FOLDER="${PRINTER_DATA_FOLDER}/config"
+    KLIPPER_KLIPPY_FOLDER="/usr/share/klipper/klippy"
+    if [ "$PRINTER_MODEL" = "K1_2025" ]; then
+        KLIPPER_SERVICE_URL="${S_FILES}/services/CS55klipper_service_minimal"
+    else
+        KLIPPER_SERVICE_URL="${S_FILES}/services/S55klipper_service"
+    fi
+    KLIPPER_GCODE_URL="${S_FILES}/fixes/gcode.py"
+    KLIPPER_GCODE_3V3_URL="${S_FILES}/fixes/gcode_3v3.py"
+
+    # Klipper Adaptive Meshing & Purging #
+    KAMP_FOLDER="${S_CONFIG_FOLDER}/KAMP"
+    KAMP_URL="${S_FILES}/kamp"
+    VIRTUAL_PINS_FILE="${KLIPPER_EXTRAS_FOLDER}/virtual_pins.py"
+    VIRTUAL_PINS_URL="${S_FILES}/klipper-virtual-pins/virtual_pins.py"
 
 
     # Creality Web Interface #
