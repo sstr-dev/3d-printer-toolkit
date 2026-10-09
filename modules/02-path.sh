@@ -16,17 +16,17 @@ strikethrough=$(printf '\033[9m')
 # Creates project-local system directories for generic printers.
 set_paths() {
     case "$PRINTER_MODEL" in
-        K1C) 
-            USR_DATA=${USR_DATA:-/usr/data} 
-            USR_SHARE=${USR_SHARE:-/usr/share} 
-            INITD_FOLDER=${INITD_FOLDER:-/etc/init.d} 
+        K1C)
+            USR_DATA=${USR_DATA:-/usr/data}
+            USR_SHARE=${USR_SHARE:-/usr/share}
+            INITD_FOLDER=${INITD_FOLDER:-/etc/init.d}
             BIN_FOLDER=${BIN_FOLDER:-/usr/bin} ;;
-        K1_2025) 
+        K1_2025)
             USR_DATA=${USR_DATA:-/usr/data}
             USR_SHARE=${USR_SHARE:-/usr/share}
             INITD_FOLDER=${INITD_FOLDER:-/usr/apps/etc/init.d}
             BIN_FOLDER=${BIN_FOLDER:-/usr/apps/usr/bin} ;;
-        *) 
+        *)
             USR_DATA=${USR_DATA:-"$PROJECT_ROOT/.local/usr/data"}
             USR_SHARE=${USR_SHARE:-"$PROJECT_ROOT/.local/usr/share"}
             INITD_FOLDER=${INITD_FOLDER:-"$PROJECT_ROOT/.local/etc/init.d"}
@@ -41,7 +41,7 @@ set_paths() {
     MOONRAKER_CFG="${PRINTER_DATA_CONFIG_FOLDER}/moonraker.conf"
     PRINTER_CFG="${PRINTER_DATA_CONFIG_FOLDER}/printer.cfg"
     MACROS_CFG="${PRINTER_DATA_CONFIG_FOLDER}/gcode_macro.cfg"
-  
+
     # Printer Script #
     S_FILES="${PROJECT_ROOT}/files"
     S_ACTIONS="${PROJECT_ROOT}/actions"
@@ -62,7 +62,7 @@ set_paths() {
         done
     fi
 
-    # path per application..
+    # Application paths.
 
     # Entware #
     ENTWARE_FILE="/opt/bin/opkg"
@@ -145,16 +145,20 @@ set_permissions() {
 }
 
 check_folder() {
-  [ -d "$1" ]
+    [ -d "$1" ]
 }
 
 check_file() {
-  [ -f "$1" ]
+    [ -f "$1" ]
 }
 
 check_moonraker_component() {
-  [ -n "${1:-}" ] && [ -r "$MOONRAKER_CFG" ] || return 1
-  grep -Fq "[$1]" "$MOONRAKER_CFG"
+    [ -n "${1:-}" ] && [ -r "$MOONRAKER_CFG" ] || return 1
+    grep -q "^\[$1\]" "$MOONRAKER_CFG"
 }
 
-
+# check_printer_component "output_pin LED"
+check_printer_component() {
+    [ -n "${1:-}" ] && [ -r "$PRINTER_CFG" ] || return 1
+    grep -q "^\[$1\]" "$PRINTER_CFG"
+}

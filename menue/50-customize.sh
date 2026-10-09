@@ -81,7 +81,7 @@ creality_web_interface()
                     killall -q web-server
                     set -e
                     echo -e "Info: Restarting Nginx service..."
-                    #restart_nginx
+                    restart_nginx
                     ok_msg "Creality Web Interface has been removed successfully!"
                     return;;
                 N|n)
@@ -109,7 +109,7 @@ creality_web_interface()
                 mv /usr/bin/Monitor.disabled /usr/bin/Monitor
             fi
             echo -e "Info: Restarting services..."
-            # restart_nginx
+            restart_nginx
             set +e
             killall -q Monitor
             killall -q web-server

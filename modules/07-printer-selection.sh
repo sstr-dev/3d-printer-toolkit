@@ -11,7 +11,7 @@ run_printer_selection_actions() {
             return 1 ;;
     esac
 
-    # actions for all (exclude generic) all-printers
+    # Run shared actions for all non-generic printers.
     if [ "$PRINTER_MODEL" != "generic" ]; then
         for printer_selection_script in "$S_ACTIONS/on-select/all-printers"/*.sh; do
             [ -f "$printer_selection_script" ] || continue
@@ -22,7 +22,7 @@ run_printer_selection_actions() {
         done
     fi
 
-    # actions for selection
+    # Run actions for the selected printer.
     for printer_selection_script in "$S_ACTIONS/on-select/$PRINTER_MODEL"/*.sh; do
         [ -f "$printer_selection_script" ] || continue
         if ! . "$printer_selection_script"; then
