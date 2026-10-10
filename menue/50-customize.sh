@@ -153,9 +153,17 @@ extra_macros()
         case "${yn}" in
             R|r)
                 echo -e "${white}"
-                echo -e "Info: Removing files..." 
+                echo -e "Info: Removing files..."
                 rm -rf "$EXTRA_MACROS_FOLDER"
-                rm -f "$S_CONFIG_FOLDER"/macros_loader.cfg                
+                rm -f "$S_CONFIG_FOLDER"/macros_loader.cfg
+                rm -f "$S_CONFIG_FOLDER"/printer_variables.cfg
+                # [include printer_variables.cfg]
+                if grep -q "include 3dp-toolkit/printer_variables" "$PRINTER_CFG" ; then
+                    echo -e "Info: Removing Extra macros configurations in printer.cfg file..."
+                    sed -i '/include 3dp-toolkit\/printer_variables\.cfg/d' "$PRINTER_CFG"
+                else
+                    echo -e "Info: Extra macros printer_variables configurations are already removed in printer.cfg file..."
+                fi
                 if grep -q "include 3dp-toolkit/macros_loader" "$PRINTER_CFG" ; then
                     echo -e "Info: Removing Extra macros configurations in printer.cfg file..."
                     sed -i '/include 3dp-toolkit\/macros_loader\.cfg/d' "$PRINTER_CFG"
@@ -207,7 +215,29 @@ extra_macros()
                     cp "$EXTRA_MACROS_URL"/loader.cfg "$S_CONFIG_FOLDER"/macros_loader.cfg
                 fi
 
+                # printer_variables
+                if check_file "$S_CONFIG_FOLDER"/printer_variables.cfg; then
+                    local yn_ov
+                    printf 'printer_variables already exists, if you made manual changes select N. Overwrite? (y/N): '
+                    IFS= read -r yn_ov || return 1
+                    case "$yn_ov" in
+                        Y|y) 
+                            request_restart=1
+                            cp -r "$EXTRA_MACROS_URL"/printer_variables.cfg "$S_CONFIG_FOLDER"/printer_variables.cfg ;;
+                    esac
+                else
+                    request_restart=1
+                    cp "$EXTRA_MACROS_URL"/printer_variables.cfg "$S_CONFIG_FOLDER"/printer_variables.cfg
+                fi
+
                 # Check printer.cfg
+                if grep -q "include 3dp-toolkit/printer_variables" "$PRINTER_CFG" ; then
+                    echo -e "Info: Extra macros printer_variables are already enabled in printer.cfg file..."
+                else
+                    echo -e "Info: Adding Extra macros printer_variables in printer.cfg file..."
+                    sed -i '/\[include printer_params\.cfg\]/a [include 3dp-toolkit/printer_variables.cfg]' "$PRINTER_CFG"
+                    request_restart=1
+                fi
                 if grep -q "include 3dp-toolkit/macros_loader" "$PRINTER_CFG" ; then
                     echo -e "Info: Extra macros configurations are already enabled in printer.cfg file..."
                 else
@@ -215,7 +245,7 @@ extra_macros()
                     sed -i '/\[include printer_params\.cfg\]/a [include 3dp-toolkit/macros_loader.cfg]' "$PRINTER_CFG"
                     request_restart=1
                 fi
-
+                
                 if [ "$request_restart" = 1 ]; then
                     echo -e "Info: Restarting Klipper service..."
                     restart_klipper
