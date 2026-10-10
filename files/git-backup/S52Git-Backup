@@ -1,29 +1,106 @@
 #!/bin/sh
+# Modified 2026 by Sascha (sstr-dev)
 
-start_git_backup() {
-  echo "Info: Starting Git Backup..."
-  /usr/data/3dp-toolkit/files/git-backup/git-backup.sh -b "$BRANCH" -t "$TARGET" -g origin > /dev/null 2>&1 &
+PIDFILE=${PIDFILE:-/var/run/git-backup.pid}
+if ! command -v start-stop-daemon >/dev/null 2>&1; then
+  echo "Error: start-stop-daemon is required to manage Git Backup." >&2
+  exit 1
+fi
+
+backup_running() {
+  [ -f "$PIDFILE" ] || return 1
+  IFS= read -r backup_pid < "$PIDFILE" || return 1
+  case "$backup_pid" in ''|*[!0-9]*|0|1) return 1 ;; esac
+  kill -0 "$backup_pid" 2>/dev/null || return 1
+  [ -r "/proc/$backup_pid/cmdline" ] || return 1
+  tr '\000' '\n' < "/proc/$backup_pid/cmdline" | grep -Fx -- "$GIT_BACKUP_SCRIPT" >/dev/null
 }
 
-case "$1" in
-  start)
-    start_git_backup
-    ;;
-  stop)
-    echo "Info: Stopping Git Backup..."
-    killall -q git-backup.sh
-    killall -q inotifywait
-    ;;
-  restart)
-    echo "Info: Restarting Git Backup..."
-    $0 stop
-    sleep 1
-    start_git_backup
-    ;;
-  *)
-    echo "Usage: $0 {start|stop|restart}"
-    exit 1
-    ;;
-esac
+start_git_backup() {
+  if [ ! -x "${GIT_BACKUP_SCRIPT:-}" ]; then
+    echo "Error: Git Backup script is missing or not executable." >&2
+    return 1
+  fi
+  if backup_running; then
+    echo "Info: Git Backup is already running."
+    return 0
+  fi
+  echo "Info: Starting Git Backup..."
+  rm -f "$PIDFILE" || return 1
+  start-stop-daemon -S -q -b -m -p "$PIDFILE" -x /bin/sh -- \
+    "$GIT_BACKUP_SCRIPT" -b "$BRANCH" -t "$TARGET" -g origin || return 1
+  sleep 1
+  if ! backup_running; then
+    rm -f "$PIDFILE"
+    echo "Error: Git Backup failed to start." >&2
+    return 1
+  fi
+}
 
+stop_git_backup() {
+  echo "Info: Stopping Git Backup..."
+  if backup_running; then
+    start-stop-daemon -K -q -o -p "$PIDFILE" -x /bin/sh || return 1
+    attempts=0
+    while backup_running; do
+      if [ "$attempts" -ge 10 ]; then
+        echo "Error: Git Backup did not stop." >&2
+        return 1
+      fi
+      sleep 1
+      attempts=$((attempts + 1))
+    done
+  fi
+  rm -f "$PIDFILE"
+}
+
+kill_backup_children() (
+  children=
+  if [ -r "/proc/$1/task/$1/children" ]; then
+    IFS= read -r children < "/proc/$1/task/$1/children" || :
+  else
+    children=$(awk -v parent="$1" '
+      $1 == "PPid:" && $2 == parent {
+        split(FILENAME, path, "/")
+        print path[3]
+      }
+    ' /proc/[0-9]*/status 2>/dev/null) || :
+  fi
+  for child in $children; do
+    kill -STOP "$child" 2>/dev/null || continue
+    kill_backup_children "$child"
+    kill -KILL "$child" 2>/dev/null || :
+  done
+)
+
+reset_git_backup() {
+  echo "Info: Force-stopping Git Backup and clearing its PID file..."
+  if backup_running; then
+    # Freeze the parent before collecting children; SIGKILL cannot run cleanup.
+    kill -STOP "$backup_pid" || return 1
+    kill_backup_children "$backup_pid"
+    if ! start-stop-daemon -K -q -o -s KILL -p "$PIDFILE" -x /bin/sh; then
+      kill -CONT "$backup_pid" 2>/dev/null || :
+      return 1
+    fi
+    attempts=0
+    while backup_running; do
+      if [ "$attempts" -ge 10 ]; then
+        echo "Error: Git Backup could not be killed; PID file retained." >&2
+        return 1
+      fi
+      sleep 1
+      attempts=$((attempts + 1))
+    done
+  fi
+  rm -f "$PIDFILE"
+}
+
+case "${1:-}" in
+  start) start_git_backup || exit 1 ;;
+  stop) stop_git_backup || exit 1 ;;
+  restart) stop_git_backup && start_git_backup || exit 1 ;;
+  reset) reset_git_backup || exit 1 ;;
+  *) echo "Usage: $0 {start|stop|restart|reset}" >&2; exit 1 ;;
+esac
 exit 0

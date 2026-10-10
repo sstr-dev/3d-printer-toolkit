@@ -473,7 +473,10 @@ if check_file "$FAN_CONTROLS_FILE"; then
 fi
 #register_action "$(check_file_action "$SCREWS_ADJUST_FILE")"'Screws Tilt Adjust Support'
 #register_action "$(check_file_action "$M600_SUPPORT_FILE")"'M600 Support'
-#register_action "$(check_file_action "$GIT_BACKUP_FILE")"'Git Backup'
+
+
+
+
 
 # only 2025
 #menu_option '12' 'Install' 'Extended Gcode Params'

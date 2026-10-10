@@ -423,13 +423,13 @@ change_camera_settings()
     fi
 }
 
-
 register_action "$(check_klipper_update_allow_action)"'Allow Updating Klipper configuration files' prevent_allow_updating_klipper_files tools 'K1C K1_2025'
 
 register_action 'Fix printing Gcode files from folder' printing_gcode_from_folder tools 'K1 K1C'
 
 register_action "$(check_camera_settings_menu_action)"'Camera settings in Moonraker' change_camera_settings tools 'K1 K1C'
 
+register_action "$(check_file_action "$GIT_BACKUP_FILE")"'Git Backup' "$S_ACTIONS/git-backup.sh" tools 'generic K1 K1C'
 
 if check_folder "$MOONRAKER_FOLDER"; then
     register_action 'Restart -> Moonraker' restart_moonraker_action tools 'K1C K1_2025'

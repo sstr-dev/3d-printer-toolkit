@@ -175,7 +175,8 @@ set_paths() {
     GIT_BACKUP_INSTALLER="${S_FILES}/git-backup/git-backup.sh"
     GIT_BACKUP_FILE="${S_CONFIG_FOLDER}/git-backup.cfg"
     GIT_BACKUP_URL="${S_FILES}/git-backup/git-backup.cfg"
-    
+    GIT_BACKUP_TEMPLATES_FOLDER="${S_FILES}/git-backup/templates"
+
     # Moonraker Timelapse #
     TIMELAPSE_FILE="${USR_DATA}/moonraker/moonraker/moonraker/components/timelapse.py"
     TIMELAPSE_URL1="${S_FILES}/moonraker-timelapse/timelapse.py"
