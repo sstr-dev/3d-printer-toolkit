@@ -34,7 +34,7 @@ apply_self_update() {
     git -C "$PROJECT_ROOT" merge --ff-only "$UPDATE_TARGET" || return 1
     chmod +x "$PROJECT_ROOT/main.sh" || return 1
     UPDATE_AVAILABLE=0
-    printf 'Update complete. Exit and restart the toolkit to load the new version.\n'
+    printf 'Update complete. The toolkit will exit after you continue. Restart it to load the new version.\n'
 }
 
 # Check for an update and ask before applying it.
@@ -52,6 +52,7 @@ q|Exit') || return 130
                 menu_run apply_self_update
                 update_status=$?
                 menu_pause || return 130
+                [ "$update_status" -ne 0 ] || return 130
                 return "$update_status" ;;
             0|b|n|N) return 0 ;;
             q) return 130 ;;
