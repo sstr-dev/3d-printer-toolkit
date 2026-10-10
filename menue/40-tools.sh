@@ -278,8 +278,9 @@ printing_gcode_from_folder()
     done
 }
 
-check_camera_settings_menu_action() {
-    if check_moonraker_component_action "webcam Camera"; then
+check_camera_settings_menu_action()
+{
+    if check_moonraker_component "webcam Camera"; then
         echo -e '[x] '
     else
         echo -e "[ ] "
