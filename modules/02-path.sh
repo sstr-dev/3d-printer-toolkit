@@ -144,7 +144,14 @@ set_paths() {
     RESTORE_SHAPERS_URL="${S_FILES}/restore-input-shapers/shaper_defs.py"
     SHAPER_DEFS_FILE="${KLIPPER_EXTRAS_FOLDER}/shaper_defs.py"
 
+    # Fluidd #
+    FLUIDD_FOLDER="${USR_DATA}/fluidd"
+    FLUIDD_URL="https://github.com/fluidd-core/fluidd/releases/latest/download/fluidd.zip"
 
+    # Mainsail #
+    MAINSAIL_FOLDER="${USR_DATA}/mainsail"
+    MAINSAIL_URL="https://github.com/mainsail-crew/mainsail/releases/latest/download/mainsail.zip"
+    
     # Useful Macros #
     USEFUL_MACROS_FILE="${S_CONFIG_FOLDER}/useful-macros.cfg"
     USEFUL_MACROS_URL="${S_FILES}/macros/useful-macros.cfg"

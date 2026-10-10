@@ -418,54 +418,58 @@ setup_save_zoffset_macros()
 # install / update
 
 # ESSENTIALS
-register_action "$(check_folder_action "$MOONRAKER_FOLDER")"'Moonraker & Nginx' "$S_ACTIONS/moonraker_nginx.sh" install 'K1C generic'
+register_action "$(check_folder_action "$MOONRAKER_FOLDER")"'Moonraker & Nginx' "$S_ACTIONS/moonraker_nginx.sh" install 'K1 K1C'
 if check_folder "$MOONRAKER_FOLDER"; then
-    register_action "$(check_folder_action "$MOONRAKER_FOLDER")"'Moonraker & Nginx' "$S_ACTIONS/moonraker_nginx.sh" remove 'K1C generic'
+    register_action "$(check_folder_action "$MOONRAKER_FOLDER")"'Moonraker & Nginx' "$S_ACTIONS/moonraker_nginx.sh" remove 'K1 K1C'
 fi
 #register_action "$(check_folder_action "$MOONRAKER_FOLDER")"'Moonraker & Nginx'
-#register_action "$(check_folder_action "$FLUIDD_FOLDER")"'Fluidd'
+register_action "$(check_folder_action "$FLUIDD_FOLDER")"'Fluidd' "$S_ACTIONS/fluidd.sh" install 'K1 K1C generic'
+if check_folder "$FLUIDD_FOLDER"; then
+    register_action "$(check_folder_action "$FLUIDD_FOLDER")"'Fluidd' "$S_ACTIONS/fluidd.sh" remove 'K1 K1C generic'
+fi
+
 #register_action "$(check_folder_action "$MAINSAIL_FOLDER")"'Mainsail'
 
 # UTILITIES
-register_action "$(check_file_action "$ENTWARE_FILE")"'Entware' "$S_ACTIONS/entware.sh" install 'K1C K1_2025'
+register_action "$(check_file_action "$ENTWARE_FILE")"'Entware' "$S_ACTIONS/entware.sh" install 'K1 K1C K1_2025'
 if check_file "$ENTWARE_FILE"; then
-    register_action "$(check_file_action "$ENTWARE_FILE")"'Entware' "$S_ACTIONS/entware.sh" remove 'K1C K1_2025'
+    register_action "$(check_file_action "$ENTWARE_FILE")"'Entware' "$S_ACTIONS/entware.sh" remove 'K1 K1C K1_2025'
 fi
-register_action "$(check_file_action "$KLIPPER_SHELL_FILE")"'Klipper Gcode Shell Command' setup_gcode_shell_command install 'K1C K1_2025'
+register_action "$(check_file_action "$KLIPPER_SHELL_FILE")"'Klipper Gcode Shell Command' setup_gcode_shell_command install 'K1 K1C K1_2025'
 if check_file "$KLIPPER_SHELL_FILE"; then
-    register_action "$(check_file_action "$KLIPPER_SHELL_FILE")"'Klipper Gcode Shell Command' setup_gcode_shell_command remove 'K1C K1_2025'
+    register_action "$(check_file_action "$KLIPPER_SHELL_FILE")"'Klipper Gcode Shell Command' setup_gcode_shell_command remove 'K1 K1C K1_2025'
 fi
 
 # IMPROVEMENTS
-register_action "$(check_folder_action "$KAMP_FOLDER")"'Klipper Adaptive Meshing & Purging' "$S_ACTIONS/kamp.sh" install 'K1C'
+register_action "$(check_folder_action "$KAMP_FOLDER")"'Klipper Adaptive Meshing & Purging' "$S_ACTIONS/kamp.sh" install 'K1 K1C'
 if check_folder "$KAMP_FOLDER"; then
-    register_action "$(check_folder_action "$KAMP_FOLDER")"'Klipper Adaptive Meshing & Purging' "$S_ACTIONS/kamp.sh" remove 'K1C'
+    register_action "$(check_folder_action "$KAMP_FOLDER")"'Klipper Adaptive Meshing & Purging' "$S_ACTIONS/kamp.sh" remove 'K1 K1C'
 fi
-register_action "$(check_file_action "$BUZZER_FILE")"'Buzzer Support' setup_buzzer_support install 'K1C'
+register_action "$(check_file_action "$BUZZER_FILE")"'Buzzer Support' setup_buzzer_support install 'K1 K1C'
 if check_file "$BUZZER_FILE"; then
-    register_action "$(check_file_action "$BUZZER_FILE")"'Buzzer Support' setup_buzzer_support remove 'K1C'
+    register_action "$(check_file_action "$BUZZER_FILE")"'Buzzer Support' setup_buzzer_support remove 'K1 K1C'
 fi
-register_action "$(check_folder_action "$NOZZLE_CLEANING_FOLDER")"'Nozzle Cleaning Fan Control' setup_nozzle_cleaning_fan_control install 'K1C'
+register_action "$(check_folder_action "$NOZZLE_CLEANING_FOLDER")"'Nozzle Cleaning Fan Control' setup_nozzle_cleaning_fan_control install 'K1 K1C'
 if check_folder "$NOZZLE_CLEANING_FOLDER"; then
-    register_action "$(check_folder_action "$NOZZLE_CLEANING_FOLDER")"'Nozzle Cleaning Fan Control' setup_nozzle_cleaning_fan_control remove 'K1C'
+    register_action "$(check_folder_action "$NOZZLE_CLEANING_FOLDER")"'Nozzle Cleaning Fan Control' setup_nozzle_cleaning_fan_control remove 'K1 K1C'
 fi
-register_action "$(check_file_action "$FAN_CONTROLS_FILE")"'Fans Control Macros' setup_fans_control_macros install 'K1C'
+register_action "$(check_file_action "$FAN_CONTROLS_FILE")"'Fans Control Macros' setup_fans_control_macros install 'K1 K1C'
 if check_file "$FAN_CONTROLS_FILE"; then
-    register_action "$(check_file_action "$FAN_CONTROLS_FILE")"'Fans Control Macros' setup_fans_control_macros remove 'K1C'
+    register_action "$(check_file_action "$FAN_CONTROLS_FILE")"'Fans Control Macros' setup_fans_control_macros remove 'K1 K1C'
 fi
 
 
-register_action "$(check_folder_action "$IMP_SHAPERS_FOLDER")"'Improved Shapers Calibrations' "$S_ACTIONS/improved_shapers.sh" install 'K1C'
+register_action "$(check_folder_action "$IMP_SHAPERS_FOLDER")"'Improved Shapers Calibrations' "$S_ACTIONS/improved_shapers.sh" install 'K1 K1C'
 if check_folder "$IMP_SHAPERS_FOLDER"; then
-    register_action "$(check_folder_action "$IMP_SHAPERS_FOLDER")"'Improved Shapers Calibrations' "$S_ACTIONS/improved_shapers.sh" remove 'K1C'
+    register_action "$(check_folder_action "$IMP_SHAPERS_FOLDER")"'Improved Shapers Calibrations' "$S_ACTIONS/improved_shapers.sh" remove 'K1 K1C'
 fi
-register_action "$(check_file_action "$USEFUL_MACROS_FILE")"'Useful Macros' setup_useful_macros install 'K1C'
+register_action "$(check_file_action "$USEFUL_MACROS_FILE")"'Useful Macros' setup_useful_macros install 'K1 K1C'
 if check_file "$FAN_CONTROLS_FILE"; then
-    register_action "$(check_file_action "$USEFUL_MACROS_FILE")"'Useful Macros' setup_useful_macros remove 'K1C'
+    register_action "$(check_file_action "$USEFUL_MACROS_FILE")"'Useful Macros' setup_useful_macros remove 'K1 K1C'
 fi
-register_action "$(check_file_action "$SAVE_ZOFFSET_FILE")"'Save Z-Offset Macros' setup_save_zoffset_macros install 'K1C'
+register_action "$(check_file_action "$SAVE_ZOFFSET_FILE")"'Save Z-Offset Macros' setup_save_zoffset_macros install 'K1 K1C'
 if check_file "$FAN_CONTROLS_FILE"; then
-    register_action "$(check_file_action "$SAVE_ZOFFSET_FILE")"'Save Z-Offset Macros' setup_save_zoffset_macros remove 'K1C'
+    register_action "$(check_file_action "$SAVE_ZOFFSET_FILE")"'Save Z-Offset Macros' setup_save_zoffset_macros remove 'K1 K1C'
 fi
 #register_action "$(check_file_action "$SCREWS_ADJUST_FILE")"'Screws Tilt Adjust Support'
 #register_action "$(check_file_action "$M600_SUPPORT_FILE")"'M600 Support'

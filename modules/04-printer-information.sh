@@ -38,3 +38,16 @@ detect_printer_information() {
         PRINTER_IPS=$(hostname -I 2>/dev/null) || PRINTER_IPS=''
     fi
 }
+
+check_ipaddress()
+{
+    eth0_ip=$(ip -4 addr show eth0 2>/dev/null | grep -o -E '(inet\s)([0-9]+\.){3}[0-9]+' | cut -d ' ' -f 2 | head -n 1)
+    wlan0_ip=$(ip -4 addr show wlan0 | grep -o -E '(inet\s)([0-9]+\.){3}[0-9]+' | cut -d ' ' -f 2 | head -n 1)
+    if [ -n "$eth0_ip" ]; then
+        echo -e "$eth0_ip"
+    elif [ -n "$wlan0_ip" ]; then
+        echo -e "$wlan0_ip"
+    else
+        echo -e "xxx.xxx.xxx.xxx"
+    fi
+}
