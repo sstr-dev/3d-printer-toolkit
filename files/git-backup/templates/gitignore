@@ -1,6 +1,11 @@
 .git/
 *.bkp
 *.log
+*.tmp
+*.swp
+*.swo
+*~
 database.sqlite*
 .DS_Store
 printer-*.cfg
+backup_*.tar.gz
