@@ -75,3 +75,12 @@ Menus use numbered prompts, with a shared header, bordered options, and a footer
 - [Startup lifecycle](docs/README.md)
 - [Action registration and shared functions](docs/actions.md)
 - [Printer settings, paths, and self updates](docs/configuration.md)
+
+## License
+
+Original project code and documentation by Sascha (sstr-dev) are licensed under
+the [MIT License](LICENSE), except where otherwise indicated. The license text
+is published by the [Open Source Initiative](https://opensource.org/license/mit).
+
+Third-party code, assets and derived works retain their applicable licenses and
+copyright notices.
