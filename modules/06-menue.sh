@@ -209,7 +209,7 @@ install_msg() {
 }
 
 update_msg() {
-    read -r -p "${white} ${green}${1}${white} already installed, update? (${yellow}y${white}/${yellow}n${white}): ${yellow}" "$2"
+    read -r -p "${white} ${green}${1}${white} is already installed. Update (${yellow}u${white}), remove (${yellow}r${white}), or cancel (${yellow}c${white}): ${yellow}" "$2"
 }
 
 remove_msg() {

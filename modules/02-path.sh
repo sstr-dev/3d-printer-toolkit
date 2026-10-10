@@ -122,6 +122,10 @@ set_paths() {
     VIRTUAL_PINS_FILE="${KLIPPER_EXTRAS_FOLDER}/virtual_pins.py"
     VIRTUAL_PINS_URL="${S_FILES}/klipper-virtual-pins/virtual_pins.py"
 
+    # Extra macros #
+    EXTRA_MACROS_FOLDER="${S_CONFIG_FOLDER}/macros"
+    EXTRA_MACROS_URL="${S_FILES}/macros/extra"
+
     # Buzzer Support #
     BUZZER_FILE="${S_CONFIG_FOLDER}/buzzer-support.cfg"
     BUZZER_URL="${S_FILES}/buzzer-support/buzzer-support.cfg"

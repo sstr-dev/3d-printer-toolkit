@@ -16,6 +16,12 @@ kamp_install() {
     while true; do
         if [ "$installed" = 1 ]; then
             update_msg "$ACTION_COMPONENT" yn || return 1
+            case "$yn" in
+                U|u|update) yn=y ;;
+                R|r|remove) kamp_remove confirmed; return $? ;;
+                C|c|cancel) return 0 ;;
+                *) error_msg "Please select update, remove, or cancel!"; continue ;;
+            esac
         else
             install_msg "$ACTION_COMPONENT" yn || return 1
         fi
@@ -115,7 +121,11 @@ kamp_install() {
 kamp_remove() {
     local yn
     while true; do
-        remove_msg "$ACTION_COMPONENT" yn || return 1
+        if [ "${1:-}" = confirmed ]; then
+            yn=y
+        else
+            remove_msg "$ACTION_COMPONENT" yn || return 1
+        fi
         case "${yn}" in
             Y|y)
                 echo -e "${white}"
