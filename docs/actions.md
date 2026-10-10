@@ -39,13 +39,12 @@ Self Update calls `update_menu` directly. Although `update` is a valid category,
 | `run_printer_selection_actions` | Validates the model and sources shared/model startup hooks; stops on failure |
 | `detect_printer_information` | Populates `PRINTER_SN`, `PRINTER_VERSION`, and `PRINTER_IPS` where available |
 | `detect_system_information` | Populates hostname, kernel, memory, uptime, load, and disk values in `SYSTEM_*` variables |
-| `menu_interactive` | Succeeds when `MENU_INTERACTIVE=1`, stdin and stderr are terminals, and `TERM` is not `dumb` |
 | `menu_select` | Accepts a title and newline-separated key/label records separated by pipes; renders to stderr and prints the selected key to stdout; returns `130` on cancellation/input failure |
 | `show_action_menu` | Accepts a category and title; dispatches selections, handles failures and back/exit navigation |
 | `menu_run` | Clears the display when appropriate and executes the supplied target and arguments in a subshell |
 | `menu_pause` | Waits for Enter when stdin is a terminal; returns `130` on input failure |
 | `menu_clear` | Clears supported terminal displays in both navigation modes |
-| `menu_header`, `menu_option` | Render shared headers and options for both navigation modes; `menu_option` accepts `selected` as its second argument |
+| `menu_header`, `menu_option` | Render headers and numbered options |
 | `menu_line` | Renders text and an optional named color, truncating to the configured width |
 | `system_line` | Renders a label, value, and optional color; omits empty/unavailable values and wraps long lines |
 | `hr`, `top_line`, `outer_line`, `inner_line` | Draw menu borders; `hr` accepts fill, left-edge, and right-edge characters |

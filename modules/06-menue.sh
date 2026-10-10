@@ -1,10 +1,5 @@
 #!/bin/sh
 
-menu_interactive() {
-    [ "${MENU_INTERACTIVE:-0}" = 1 ] || return 1
-    [ -t 0 ] && [ -t 2 ] && [ "${TERM:-dumb}" != dumb ]
-}
-
 menu_clear() {
     [ -t 2 ] && [ "${TERM:-dumb}" != dumb ] || return 0
     if command -v clear >/dev/null 2>&1; then
@@ -109,13 +104,7 @@ menu_header() {
 }
 
 menu_option() {
-    if [ "${2:-}" = selected ]; then
-        printf '\033[7m' >&2
-        menu_line "> $1"
-        printf '%s' "$white" >&2
-    else
-        menu_line "  $1"
-    fi
+    menu_line "  $1"
 }
 
 # Print only the selected key to stdout; render the interface on stderr.
@@ -126,76 +115,27 @@ menu_select() (
     menu_title=$1
     menu_options=$2
     menu_clear
-    if ! menu_interactive; then
-        menu_header "$menu_title"
-        menu_navigation=0
-        while IFS='|' read -r menu_key menu_label; do
-            case "$menu_key" in
-                0|b|q)
-                    if [ "$menu_navigation" = 0 ]; then
-                        inner_line
-                        menu_navigation=1
-                    fi ;;
-            esac
-            menu_option "$menu_key) $menu_label"
-        done <<EOF
+    menu_header "$menu_title"
+    menu_navigation=0
+    while IFS='|' read -r menu_key menu_label; do
+        case "$menu_key" in
+            0|b|q)
+                if [ "$menu_navigation" = 0 ]; then
+                    inner_line
+                    menu_navigation=1
+                fi ;;
+        esac
+        menu_option "$menu_key) $menu_label"
+    done <<EOF
 $menu_options
 EOF
-        inner_line
-        menu_line 'Type your choice and press Enter.'
-        outer_line
-        printf 'Select: ' >&2
-        IFS= read -r menu_key || return 130
-        printf '%s\n' "$menu_key"
-        return 0
-    fi
-
-    menu_terminal=$(stty -g) || return 130
-    trap 'stty "$menu_terminal"; printf "%s\033[?25h" "$white" >&2' 0
-    trap 'exit 130' INT TERM HUP
-    stty -echo -icanon min 1 time 0 || return 130
-    printf '\033[?25l' >&2
-    menu_position=1
-    menu_escape=''
-    while true; do
-        printf '\033[H' >&2
-        menu_header "$menu_title"
-        menu_count=0
-        while IFS='|' read -r menu_key menu_label; do
-            menu_count=$((menu_count + 1))
-            if [ "$menu_count" = "$menu_position" ]; then
-                menu_selected=$menu_key
-                menu_option "$menu_label" selected
-            else
-                menu_option "$menu_label"
-            fi
-        done <<EOF
-$menu_options
-EOF
-        inner_line
-        menu_line 'Up/Down or j/k: move   Enter: select'
-        menu_line 'b: back   q: exit'
-        outer_line
-        while true; do
-            menu_input=$(dd bs=1 count=1 2>/dev/null) || return 130
-            case "$menu_input" in
-                "$(printf '\033')") menu_escape=1; continue ;;
-            esac
-            if [ "$menu_escape" = 1 ]; then
-                case "$menu_input" in '['|'O') menu_escape=2; continue ;; esac
-                menu_escape=''
-            elif [ "$menu_escape" = 2 ]; then
-                menu_escape=''
-                case "$menu_input" in A) menu_input=k ;; B) menu_input=j ;; *) continue ;; esac
-            fi
-            case "$menu_input" in
-                k) menu_position=$((menu_position - 1)); [ "$menu_position" -gt 0 ] || menu_position=$menu_count; break ;;
-                j) menu_position=$((menu_position + 1)); [ "$menu_position" -le "$menu_count" ] || menu_position=1; break ;;
-                ''|"$(printf '\r')") printf '%s\n' "$menu_selected"; return 0 ;;
-                q|b|[0-9]) printf '%s\n' "$menu_input"; return 0 ;;
-            esac
-        done
-    done
+    inner_line
+    menu_line 'Type your choice and press Enter.'
+    outer_line
+    printf 'Select: ' >&2
+    IFS= read -r menu_key || return 130
+    printf '%s\n' "$menu_key"
+    return 0
 )
 
 menu_pause() {

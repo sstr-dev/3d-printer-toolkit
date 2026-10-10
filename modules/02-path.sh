@@ -1,14 +1,18 @@
 #!/bin/sh
 
 # Colors are available before the printer selection menu.
-white=$(printf '\033[m')
-blue=$(printf '\033[36m')
-cyan=$(printf '\033[1;36m')
-yellow=$(printf '\033[1;33m')
-green=$(printf '\033[01;32m')
-darkred=$(printf '\033[31m')
-red=$(printf '\033[01;31m')
-strikethrough=$(printf '\033[9m')
+if [ -n "${NO_COLOR+x}" ]; then
+    white= blue= cyan= yellow= green= darkred= red= strikethrough=
+else
+    white=$(printf '\033[m')
+    blue=$(printf '\033[36m')
+    cyan=$(printf '\033[1;36m')
+    yellow=$(printf '\033[1;33m')
+    green=$(printf '\033[01;32m')
+    darkred=$(printf '\033[31m')
+    red=$(printf '\033[01;31m')
+    strikethrough=$(printf '\033[9m')
+fi
 
 # Set printer paths from PRINTER_MODEL and optional path overrides.
 # Sets: USR_DATA, USR_SHARE, INITD_FOLDER, BIN_FOLDER, PRINTER_DATA_FOLDER,

@@ -18,18 +18,16 @@ The current application, backup, and hostname actions are restricted to `K1C gen
 
 ## Menu navigation
 
-`MENU_INTERACTIVE` defaults to `0`, using numbered prompts. Set it to `1` in `.env` to enable arrow-key navigation. Passing `--interactive` to `main.sh` enables it for that run and overrides `.env`. Interactive mode requires stdin and stderr to be terminals and `TERM` not to be `dumb`; otherwise numbered prompts are used.
+Menus use numbered prompts with a header, bordered options, and footer. Back/Exit options are separated from actions. Enter a displayed key and press Enter.
 
-Both modes use the same header, bordered options, and footer. Numbered menus show the selection keys and separate Back/Exit options from actions. Enter a displayed key and press Enter. In arrow-key mode, use arrows or `j`/`k`, then Enter.
-
-Supported terminals are cleared when opening a menu or action. After an action, both modes wait for Enter before returning to the menu when stdin is a terminal. Piped input skips this pause. Redirected menu output contains no screen-clearing sequences.
+Supported terminals are cleared when opening a menu or action. After an action, menus wait for Enter before returning to the menu when stdin is a terminal. Piped input skips this pause. Redirected menu output contains no screen-clearing sequences.
 
 | Setting | Default | Description |
 | --- | --- | --- |
 | `MENU_WIDTH` | `64` | Width inside the border, from `20` to `200`; invalid values use `64`. Full lines are two characters wider |
 | `MENU_OUTER_CHAR` | `=` | Character used for the top and bottom borders |
 | `MENU_INNER_CHAR` | `-` | Character used for separators |
-| `NO_COLOR` | Unset | Setting any value disables named text colors; interactive selection highlighting remains |
+| `NO_COLOR` | Unset | Setting any value disables named text colors |
 
 Use single characters for borders. Width is fixed rather than automatically fitted to the terminal.
 
@@ -58,7 +56,7 @@ Derived paths also support overrides:
 
 | Variable | Default | Purpose |
 | --- | --- | --- |
-| `UPDATE_CHECK_ON_START` | `1` | Only `1` enables startup checking; `0` skips it and leaves Self Update hidden |
+| `UPDATE_CHECK_ON_START` | `1` | Only `1` enables startup checking; `0` skips it and leaves Self Update hidden. `--no-update-check` overrides this to `0` for one run |
 | `UPDATE_BRANCH` | `main` | Branch eligible for updates |
 | `UPDATE_REMOTE` | `origin` | Git remote to fetch |
 | `UPDATE_LOW_SPEED_LIMIT` | `1` | HTTP low-speed threshold in bytes per second |

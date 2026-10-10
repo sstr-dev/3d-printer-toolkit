@@ -11,7 +11,7 @@ Built for my own 3D printers, the toolkit separates shared helpers, menu registr
 ## Startup lifecycle
 
 1. `main.sh` resolves and makes `PROJECT_ROOT` read-only, then sources the project-local `.env` if present.
-2. It applies the `--interactive` command-line option after `.env`, rejects unknown options, clears `TOOLKIT_ENV_READY` and initializes the `ACTIONS` registry and `ACTION_COUNT`.
+2. `--help` and `--version` exit before loading `.env` or initializing the printer. Unknown options are rejected. After loading `.env`, `--no-update-check` overrides the startup update setting, `--printer MODEL` overrides the model, `--no-color` disables styling, and `--debug` enables shell tracing to stderr. Startup clears `TOOLKIT_ENV_READY` and initializes the `ACTIONS` registry and `ACTION_COUNT`.
 3. Top-level `modules/*.sh` files are sourced in filename order. Numeric filename prefixes establish dependencies.
 4. `detect_model`, `select_printer`, and `set_paths` initialize the selected printer and paths.
 5. `TOOLKIT_READY` is set to `1` and made read-only. `run_printer_selection_actions` runs startup hooks.

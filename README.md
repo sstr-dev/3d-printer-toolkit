@@ -10,11 +10,43 @@ I built this toolkit for my own 3D printers. It brings application setup, mainte
 
 This is work in progress. 
 
+## Installation
+
+Run on the printer via SSH:
+
+```sh
+git clone --depth 1 https://code.sstr.dev/sstr-dev/3d-printer-toolkit.git /usr/data/3dp-toolkit
+sh /usr/data/3dp-toolkit/main.sh
+```
+
+If cloning fails because of an SSL certificate verification error, the following workaround disables certificate verification globally for the current user's Git operations. This is insecure; fixing the printer's clock or trusted certificates is preferred.
+
+```sh
+git config --global http.sslVerify false
+```
+
+Retry the installation, then restore certificate verification:
+
+```sh
+git config --global http.sslVerify true
+```
+
 ## Usage
+
+Command-line options:
+
+| Option | Purpose |
+| --- | --- |
+| `--help` | Show usage and exit without initializing the printer |
+| `--version` | Show the Git commit, or `unknown` when unavailable, and exit |
+| `--no-update-check` | Skip the startup update check for this run, overriding `.env` |
+| `--printer MODEL` | Select `K1C`, `K1`, `K1_2025`, or `generic` for this run, overriding `.env` |
+| `--no-color` | Disable color and text styling |
+| `--debug` | Trace shell commands and expanded arguments to stderr after loading `.env`; output may contain secrets |
 
 The entry point is `main.sh`, invoked with `sh` using its full path when outside the project directory. Copy `.env.example` to `.env` to configure startup. Its default model is `K1C`; choose `generic` for development. Settings are shell code and must be trusted. See [configuration](docs/configuration.md) for current variable names and defaults.
 
-Menus use numbered prompts by default, with a shared header, bordered options, and a footer. Set `MENU_INTERACTIVE=1` in `.env` or pass `--interactive` to `main.sh` to enable arrow keys or `j`/`k` and Enter to select. Interactive navigation requires a terminal; piped input always uses numbered prompts. Use `b` to return from a submenu and `q` to exit. When using a terminal, action output remains visible until Enter is pressed, in both numbered and interactive modes. The menu header shows the selected printer model. Changing menus clears supported terminals; action output is cleared only after the Enter prompt. Menu width, border characters, and colors can be configured in `.env`.
+Menus use numbered prompts, with a shared header, bordered options, and a footer. Use `b` to return from a submenu and `q` to exit. When using a terminal, action output remains visible until Enter is pressed. The menu header shows the selected printer model. Changing menus clears supported terminals; action output is cleared only after the Enter prompt. Menu width, border characters, and colors can be configured in `.env`.
 
 | Main menu key | Destination |
 | --- | --- |
