@@ -110,18 +110,18 @@ reset_factory_settings() {
 
 # Basename of the active Klipper init script (S55… or CS55… on newer K1C firmware), or empty.
 klipper_init_script_basename() {
-  if [ -f "$INITD_FOLDER/S55klipper_service" ]; then
-    echo S55klipper_service
-  elif [ -f "$INITD_FOLDER/CS55klipper_service" ]; then
-    echo CS55klipper_service
-  fi
+    if [ -f "$INITD_FOLDER/S55klipper_service" ]; then
+        echo S55klipper_service
+    elif [ -f "$INITD_FOLDER/CS55klipper_service" ]; then
+        echo CS55klipper_service
+    fi
 }
 klipper_disabled_backup_basename() {
-  if [ -f "$INITD_FOLDER/disabled.S55klipper_service" ]; then
-    echo disabled.S55klipper_service
-  elif [ -f "$INITD_FOLDER/disabled.CS55klipper_service" ]; then
-    echo disabled.CS55klipper_service
-  fi
+    if [ -f "$INITD_FOLDER/disabled.S55klipper_service" ]; then
+        echo disabled.S55klipper_service
+    elif [ -f "$INITD_FOLDER/disabled.CS55klipper_service" ]; then
+        echo disabled.CS55klipper_service
+    fi
 }
 prevent_allow_updating_klipper_files()
 {
@@ -130,26 +130,26 @@ prevent_allow_updating_klipper_files()
         while true; do
             read -p "${white} Do you want to allow updating ${green}Klipper configuration files ${white}? (${yellow}y${white}/${yellow}n${white}): ${yellow}" yn
             case "${yn}" in
-            Y|y)
-                echo -e "${white}"
-                disabled_backup="$(klipper_disabled_backup_basename)"
-                if [ -z "$disabled_backup" ]; then
-                    error_msg "No disabled Klipper init backup found in ${INITD_FOLDER}."
-                    return
-                fi
-                klipper_init="${disabled_backup#disabled.}"
-                echo -e "Info: Restoring file..."
-                rm -f "$INITD_FOLDER/$klipper_init"
-                mv "$INITD_FOLDER/$disabled_backup" "$INITD_FOLDER/$klipper_init"
-                echo -e "Info: Restarting Klipper service..."
-                restart_klipper
-                ok_msg "Klipper configuration files will be updated when Klipper restarts!"
-                return;;
-            N|n)
-                error_msg "Authorization canceled!"
-                return;;
-            *)
-                error_msg "Please select a correct choice!";;
+                Y|y)
+                    echo -e "${white}"
+                    disabled_backup="$(klipper_disabled_backup_basename)"
+                    if [ -z "$disabled_backup" ]; then
+                        error_msg "No disabled Klipper init backup found in ${INITD_FOLDER}."
+                        return
+                    fi
+                    klipper_init="${disabled_backup#disabled.}"
+                    echo -e "Info: Restoring file..."
+                    rm -f "$INITD_FOLDER/$klipper_init"
+                    mv "$INITD_FOLDER/$disabled_backup" "$INITD_FOLDER/$klipper_init"
+                    echo -e "Info: Restarting Klipper service..."
+                    restart_klipper
+                    ok_msg "Klipper configuration files will be updated when Klipper restarts!"
+                    return;;
+                N|n)
+                    error_msg "Authorization canceled!"
+                    return;;
+                *)
+                    error_msg "Please select a correct choice!";;
             esac
         done
     else
@@ -222,13 +222,13 @@ change_chassis_light_control()
                     { print }
                     END {
                         if (!added) {
-                        print ""
-                        print "[output_pin LED]"
-                        print "pin: PA8"
-                        print "pwm: True"
-                        print "cycle_time: 0.001"
-                        print "value: 1"
-                        print "shutdown_value: 0"
+                            print ""
+                            print "[output_pin LED]"
+                            print "pin: PA8"
+                            print "pwm: True"
+                            print "cycle_time: 0.001"
+                            print "value: 1"
+                            print "shutdown_value: 0"
                         }
                     }
                 ' "$PRINTER_CFG" > "$PRINTER_CFG.tmp" && mv "$PRINTER_CFG.tmp" "$PRINTER_CFG"
@@ -245,7 +245,190 @@ change_chassis_light_control()
     done
 }
 
+printing_gcode_from_folder()
+{
+    local yn
+    while true; do
+        read -p "${white} Do you want to apply fix for ${green}printing Gcode files from folder ${white}? (${yellow}y${white}/${yellow}n${white}): ${yellow}" yn
+        case "${yn}" in
+            Y|y)
+                echo -e "${white}"
+                echo -e "Info: Deleting files..."
+                if [ -f "$KLIPPER_KLIPPY_FOLDER"/gcode.py ]; then
+                    rm -f "$KLIPPER_KLIPPY_FOLDER"/gcode.py
+                    rm -f "$KLIPPER_KLIPPY_FOLDER"/gcode.pyc
+                fi
+                echo -e "Info: Linking files..."
+                if [ "$PRINTER_MODEL" = "K1" ] || [ "$PRINTER_MODEL" = "K1C" ]; then
+                    ln -sf "$KLIPPER_GCODE_URL" "$KLIPPER_KLIPPY_FOLDER"/gcode.py
+                fi
+                if [ "$PRINTER_MODEL" = "3V3" ]; then
+                    ln -sf "$KLIPPER_GCODE_3V3_URL" "$KLIPPER_KLIPPY_FOLDER"/gcode.py
+                fi
+                echo -e "Info: Restarting Klipper service..."
+                restart_klipper
+                ok_msg "Fix has been applied successfully!"
+                return;;
+            N|n)
+                error_msg "Installation canceled!"
+                return;;
+            *)
+                error_msg "Please select a correct choice!";;
+        esac
+    done
+}
+
+check_camera_settings_menu_action() {
+    if check_moonraker_component_action "webcam Camera"; then
+        echo -e '[x] '
+    else
+        echo -e "[ ] "
+    fi
+}
+
+
+configure_usb_camera_k1_2025()
+{
+    local usb_dev
+
+    if [ ! -f "$MOONRAKER_CFG" ]; then
+        return
+    fi
+
+    usb_dev=$(v4l2-ctl --list-devices | grep -A1 usb | sed 's/^[[:space:]]*//g' | grep '^/dev' | grep -v '^/dev/video0$' | head -n 1)
+    if [ -n "$usb_dev" ]; then
+        echo -e "Info: Configuring USB camera in moonraker.conf..."
+        sed -i '/^\[webcam usb\]/,/^$/d' "$MOONRAKER_CFG"
+        cat >> "$MOONRAKER_CFG" <<EOF
+
+[webcam usb]
+enabled: True
+location: printer
+service: mjpegstreamer
+target_fps: 15
+target_fps_idle: 5
+stream_url: /webcam3/?action=stream
+snapshot_url: /webcam3/?action=snapshot
+flip_horizontal: False
+flip_vertical: False
+rotation: 0
+aspect_ratio: 16:9
+EOF
+    fi
+}
+
+configure_builtin_camera_k1_2025()
+{
+    if [ ! -f "$MOONRAKER_CFG" ]; then
+        return
+    fi
+
+    echo -e "Info: Configuring built-in camera in moonraker.conf..."
+    sed -i '/^\[webcam chassis\]/,/^$/d' "$MOONRAKER_CFG"
+    cat >> "$MOONRAKER_CFG" <<EOF
+
+[webcam chassis]
+enabled: True
+location: printer
+service: mjpegstreamer
+target_fps: 15
+target_fps_idle: 5
+stream_url: /webcam/?action=stream
+snapshot_url: /webcam/?action=snapshot
+flip_horizontal: False
+flip_vertical: False
+rotation: 0
+aspect_ratio: 16:9
+EOF
+}
+
+change_camera_settings()
+{
+    if check_moonraker_component_action "webcam Camera"; then
+        local yn
+        while true; do
+            read -p "${white} Do you want to enable ${green}camera settings in Moonraker ${white}? (${yellow}y${white}/${yellow}n${white}): ${yellow}" yn
+            case "${yn}" in
+                Y|y)
+                    echo -e "${white}"
+                    if [ "$PRINTER_MODEL" = "K1_2025" ]; then
+                        if grep -q "^\[webcam chassis\]\|^\[webcam usb\]" "$MOONRAKER_CFG"; then
+                            echo -e "Info: Disabling camera settings in moonraker.conf file..."
+                            sed -i '/^\[webcam chassis\]/,/^$/d' "$MOONRAKER_CFG"
+                            sed -i '/^\[webcam usb\]/,/^$/d' "$MOONRAKER_CFG"
+                        else
+                            echo -e "Info: Camera settings are already disabled in moonraker.conf file..."
+                        fi
+                    elif grep -q "\[webcam Camera\]" "$MOONRAKER_CFG" ; then
+                        echo -e "Info: Disabling camera settings in moonraker.conf file..."
+                        sed -i '/^\[webcam Camera\]/,/^\s*$/ s/^\(\s*\)\([^#]\)/#\1\2/' "$MOONRAKER_CFG"
+                    else
+                        echo -e "Info: Camera settings are already disabled in moonraker.conf file..."
+                    fi
+                    echo -e "Info: Restarting Moonraker service..."
+                    stop_moonraker
+                    start_moonraker
+                    ok_msg "Camera settings have been disabled in Moonraker successfully!"
+                    return;;
+                N|n)
+                    error_msg "Deactivation canceled!"
+                    return;;
+                *)
+                    error_msg "Please select a correct choice!";;
+            esac
+        done
+    else
+        local yn
+        while true; do
+            read -p "${white} Do you want to prevent updating ${green}Klipper configuration files ${white}? (${yellow}y${white}/${yellow}n${white}): ${yellow}" yn
+            case "${yn}" in
+                Y|y)
+                    echo -e "${white}"
+                    if [ "$PRINTER_MODEL" = "K1_2025" ]; then
+                        if [ -f "$BUILTIN_CAMERA_FILE" ] || [ -f "$BUILTIN_CAMERA_LEGACY_FILE" ]; then
+                            configure_builtin_camera_k1_2025
+                        fi
+                        if [ -f "$USB_CAMERA_FILE" ] || [ -f "$USB_CAMERA_LEGACY_FILE" ]; then
+                            configure_usb_camera_k1_2025
+                        fi
+                    elif grep -q "#\[webcam Camera\]" "$MOONRAKER_CFG" ; then
+                        echo -e "Info: Enabling camera settings in moonraker.conf file..."
+                        sed -i -e 's/^\s*#[[:space:]]*\[webcam Camera\]/[webcam Camera]/' -e '/^\[webcam Camera\]/,/^\s*$/ s/^\(\s*\)#/\1/' "$MOONRAKER_CFG"
+                    else
+                        echo -e "Info: Camera settings are already enabled in moonraker.conf file..."        
+                    fi
+                    local ip_address
+                    ip_address="$(check_ipaddress)"
+                    if grep -q "stream_url: http://xxx.xxx.xxx.xxx:8080/?action=stream" "$MOONRAKER_CFG"; then
+                        echo -e "Info: Replacing stream_url IP address..."
+                        sed -i "s|http://xxx.xxx.xxx.xxx:|http://$ip_address:|g" "$MOONRAKER_CFG"
+                    fi
+                    if grep -q "snapshot_url: http://xxx.xxx.xxx.xxx:8080/?action=snapshot" "$MOONRAKER_CFG"; then
+                        echo -e "Info: Replacing snapshot_url IP address..."
+                        sed -i "s|http://xxx.xxx.xxx.xxx:|http://$ip_address:|g" "$MOONRAKER_CFG"
+                    fi
+                    echo -e "Info: Restarting Moonraker service..."
+                    stop_moonraker
+                    start_moonraker
+                    ok_msg "Camera settings have been enabled in Moonraker successfully!"
+                    return;;
+                N|n)
+                    error_msg "Activation canceled!"
+                    return;;
+                *)
+                    error_msg "Please select a correct choice!";;
+            esac
+        done
+    fi
+}
+
+
 register_action "$(check_klipper_update_allow_action)"'Allow Updating Klipper configuration files' prevent_allow_updating_klipper_files tools 'K1C K1_2025'
+
+register_action 'Fix printing Gcode files from folder' printing_gcode_from_folder tools 'K1 K1C'
+
+register_action "$(check_camera_settings_menu_action)"'Camera settings in Moonraker' change_camera_settings tools 'K1 K1C'
+
 
 if check_folder "$MOONRAKER_FOLDER"; then
     register_action 'Restart -> Moonraker' restart_moonraker_action tools 'K1C K1_2025'

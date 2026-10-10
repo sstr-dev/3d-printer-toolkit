@@ -475,6 +475,14 @@ fi
 #menu_option '12' 'Install' 'Extended Gcode Params'
 #menu_option '13' 'Install' 'Start Print Calibration'
 
+# CAMERA
+register_action "$(check_file_action "$TIMELAPSE_FILE")"'Moonraker Timelapse' "$S_ACTIONS/moonraker_timelapse.sh" install 'K1 K1C'
+if check_file "$TIMELAPSE_FILE"; then
+    register_action "$(check_file_action "$TIMELAPSE_FILE")"'Moonraker Timelapse' "$S_ACTIONS/moonraker_timelapse.sh" remove 'K1 K1C'
+fi
+#register_action "$(check_file_action "$CAMERA_SETTINGS_FILE")"'Camera Settings Control'
+#register_action "$(check_file_menu "$USB_CAMERA_FILE")"'USB Camera Support'
+
 
 # CUSTOMIZATION
 register_action "$(check_folder_action "$GUPPY_SCREEN_FOLDER")"'Guppy Screen' "$S_ACTIONS/guppy_screen.sh" install 'K1 K1C'

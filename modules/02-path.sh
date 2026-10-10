@@ -189,6 +189,20 @@ set_paths() {
     CLOUD_BLOCK_SERVICE_FILE="${INITD_FOLDER}/S995cloudblock"
     #APPLICATIONS_DIR=${APPLICATIONS_DIR:-"$DATA_ROOT"}
 
+    # USB Camera Support
+    if [ "$PRINTER_MODEL" = "K1_2025" ]; then
+        USB_CAMERA_FILE="${INITD_FOLDER}/S58usb_camera"
+    else
+        USB_CAMERA_FILE="${INITD_FOLDER}/S50usb_camera"
+    fi
+    USB_CAMERA_LEGACY_FILE="${INITD_FOLDER}/S50usb_camera"
+    USB_CAMERA_SINGLE_URL="${S_FILES}/services/S50usb_camera-single"
+    USB_CAMERA_DUAL_URL="${S_FILES}/services/S50usb_camera-dual"
+    USB_CAMERA_K1_2025_URL="${S_FILES}/services/S50usb_camera-k1c-2025"
+    BUILTIN_CAMERA_FILE="${INITD_FOLDER}/S57builtin_camera"
+    BUILTIN_CAMERA_LEGACY_FILE="${INITD_FOLDER}/S50builtin_camera"
+    BUILTIN_CAMERA_K1_2025_URL="${S_FILES}/services/S50builtin_camera-k1c-2025"
+
     # Guppy Screen #
     GUPPY_SCREEN_FOLDER="${USR_DATA}/guppyscreen"
     GUPPY_SCREEN_URL1="${S_FILES}/guppy-screen/guppy_update.cfg"
