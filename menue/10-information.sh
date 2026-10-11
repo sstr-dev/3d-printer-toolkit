@@ -92,6 +92,7 @@ show_information() {
 
 show_packages_information()
 {
+    top_line
     # installed versions (moonraker, klipper, nginx, ...)
     # if check_file "$NGINX_CONF_FILE"; then
     #    # nginx
