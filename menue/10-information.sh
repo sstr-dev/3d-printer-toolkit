@@ -107,16 +107,15 @@ show_project_information()
 
 show_packages_information()
 {
+    detect_package_information
     top_line
-    # installed versions (moonraker, klipper, nginx, ...)
-    # if check_file "$NGINX_CONF_FILE"; then
-    #    # nginx
-    # fi
-
-    # list installed opkg packages
-    #if check_file "$ENTWARE_FILE"; then
-    #    #$ENTWARE_FILE list-installed
-    #fi
+    menu_line 'Packages' cyan
+    inner_line
+    system_line 'Klipper:' "${KLIPPER_VERSION:-Unavailable}"
+    system_line 'Moonraker:' "${MOONRAKER_VERSION:-Unavailable}"
+    system_line 'Fluidd:' "${FLUIDD_VERSION:-Unavailable}"
+    system_line 'Nginx:' "${NGINX_VERSION:-Unavailable}"
+    outer_line
 }
 
 
@@ -143,4 +142,4 @@ register_action 'Show all Informations' show_information
 register_action 'Show Printer Informations' show_printer_information
 register_action 'Show OS Informations' show_os_information
 register_action 'Show Project Informations' show_project_information
-# register_action 'Show Package Informations' show_packages_information
+register_action 'Show Package Informations' show_packages_information
