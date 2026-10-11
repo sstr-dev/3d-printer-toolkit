@@ -26,13 +26,15 @@ show_printer_information() (
 
     system_line 'Model:' "$PRINTER_MODEL"
     system_line 'Serial number:' "${PRINTER_SN:-Unavailable}"
+    system_line 'Machine Serial number:' "${PRINTER_MACHINE_SN:-Unavailable}"
     system_line 'Firmware:' "${PRINTER_VERSION:-Unavailable}"
+    system_line 'Mainboard:' "${PRINTER_BOARD:-Unavailable}"
     system_line 'IP addresses:' "${PRINTER_IPS:-Unavailable}"
 
     subtitle '•ESSENTIALS:'
     info_line "$(check_folder_menu "$MOONRAKER_FOLDER")" 'Moonraker & Nginx'
     info_line "$(check_folder_menu "$FLUIDD_FOLDER")" 'Fluidd'
-    info_line "$(check_folder_menu "$MAINSAIL_FOLDER")" 'Mainsail'
+    #info_line "$(check_folder_menu "$MAINSAIL_FOLDER")" 'Mainsail'
     hr
     subtitle '•UTILITIES:'
     info_line "$(check_file_menu "$ENTWARE_FILE")" 'Entware'
@@ -69,6 +71,7 @@ show_printer_information() (
     info_line "$(check_folder_menu "$GUPPY_SCREEN_FOLDER")" 'Guppy Screen'
     #info_line "$(check_file_menu "$FLUIDD_LOGO_FILE")" 'Creality Dynamic Logos for Fluidd'
     info_line "$(check_file_menu "$CLOUD_BLOCK_SERVICE_FILE")" 'Block Creality Cloud Telemetry'
+    info_line "$(check_folder_menu "$EXTRA_MACROS_FOLDER")" 'Extra macros'
 )
 
 show_information() {
@@ -87,7 +90,21 @@ show_information() {
     outer_line
 }
 
+show_packages_information()
+{
+    # installed versions (moonraker, klipper, nginx, ...)
+    # if check_file "$NGINX_CONF_FILE"; then
+    #    # nginx
+    # fi
+
+    # list installed opkg packages
+    #if check_file "$ENTWARE_FILE"; then
+    #    #$ENTWARE_FILE list-installed
+    #fi
+}
+
 register_action 'Show all Informations' show_information
 register_action 'Show Printer Informations' show_printer_information
 register_action 'Show OS Informations' show_os_information
 register_action 'Show Project Informations' show_project_information
+# register_action 'Show Package Informations' show_packages_information

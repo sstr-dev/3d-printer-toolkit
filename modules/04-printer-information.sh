@@ -5,16 +5,26 @@
 detect_printer_information() {
     PRINTER_SN=''
     PRINTER_VERSION=''
+    PRINTER_MACHINE_SN=''
+    PRINTER_BOARD=''
     case "$PRINTER_MODEL" in
         K1|K1C)
             PRINTER_SN=$(sed -n 's/.*"device_sn"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' \
                 /usr/data/creality/userdata/config/system_config.json 2>/dev/null) || PRINTER_SN=''
             PRINTER_VERSION=$(sed -n 's/.*"sys_version"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' \
                 /usr/data/creality/userdata/config/system_version.json 2>/dev/null) || PRINTER_VERSION=''
+            PRINTER_BOARD=$(sed -n 's/.*"hw_version"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' \
+                /usr/data/creality/userdata/config/system_version.json 2>/dev/null) || PRINTER_BOARD=''
+            if command -v get_sn_mac.sh >/dev/null 2>&1; then
+                PRINTER_MACHINE_SN=$(get_sn_mac.sh machine_sn 2>/dev/null) || PRINTER_MACHINE_SN=''
+                # PRINTER_BOARD=$(get_sn_mac.sh board 2>/dev/null) || PRINTER_BOARD=''
+            fi
             ;;
         K1_2025)
             if command -v get_sn_mac.sh >/dev/null 2>&1; then
                 PRINTER_SN=$(get_sn_mac.sh sn 2>/dev/null) || PRINTER_SN=''
+                PRINTER_MACHINE_SN=$(get_sn_mac.sh machine_sn 2>/dev/null) || PRINTER_MACHINE_SN=''
+                PRINTER_BOARD=$(get_sn_mac.sh board 2>/dev/null) || PRINTER_BOARD=''
             fi
             if [ -r /etc/version ]; then
                 PRINTER_VERSION=$(cat /etc/version 2>/dev/null) || PRINTER_VERSION=''
