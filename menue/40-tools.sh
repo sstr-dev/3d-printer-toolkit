@@ -1,6 +1,7 @@
 #!/bin/sh
 
-clear_cache() {
+clear_cache()
+{
     echo
     local yn gc_ok
     while true; do
@@ -35,7 +36,8 @@ clear_cache() {
     done
 }
 
-clear_logs() {
+clear_logs()
+{
     echo
     local yn
     while true; do
@@ -62,7 +64,8 @@ clear_logs() {
     done
 }
 
-restore_previous_firmware() {
+restore_previous_firmware()
+{
     local yn
     while true; do
         read -p "${white} Do you want to restore a previous firmware ? (${yellow}y${white}/${yellow}n${white}): ${yellow}" yn
@@ -88,7 +91,8 @@ restore_previous_firmware() {
     done
 }
 
-reset_factory_settings() {
+reset_factory_settings()
+{
     local yn
     while true; do
         read -p "${white} Are you sure you want to ${green}reset factory settings ${white}? (${yellow}y${white}/${yellow}n${white}): ${yellow}" yn
@@ -109,14 +113,16 @@ reset_factory_settings() {
 
 
 # Basename of the active Klipper init script (S55… or CS55… on newer K1C firmware), or empty.
-klipper_init_script_basename() {
+klipper_init_script_basename()
+{
     if [ -f "$INITD_FOLDER/S55klipper_service" ]; then
         echo S55klipper_service
     elif [ -f "$INITD_FOLDER/CS55klipper_service" ]; then
         echo CS55klipper_service
     fi
 }
-klipper_disabled_backup_basename() {
+klipper_disabled_backup_basename()
+{
     if [ -f "$INITD_FOLDER/disabled.S55klipper_service" ]; then
         echo disabled.S55klipper_service
     elif [ -f "$INITD_FOLDER/disabled.CS55klipper_service" ]; then
@@ -184,9 +190,8 @@ prevent_allow_updating_klipper_files()
     fi
 }
 
-
-
-check_chassi_light_menu_action() {
+check_chassi_light_menu_action()
+{
     if check_printer_component "output_pin LED"; then
         echo -e '[x] '
     else
@@ -244,10 +249,21 @@ change_chassis_light_control()
         esac
     done
 }
-
+check_printing_gcode_from_folder_menu_action()
+{
+    if [ -L "$KLIPPER_KLIPPY_FOLDER"/gcode.py ]; then
+        echo -e '[x] '
+    else
+        echo -e "[ ] "
+    fi
+}
 printing_gcode_from_folder()
 {
-    local yn
+    local yn gcode_file
+    if [ -L "$KLIPPER_KLIPPY_FOLDER"/gcode.py ]; then
+        error_msg "Fix for printing Gcode files from folder is already installed!"
+        return 0
+    fi
     while true; do
         read -p "${white} Do you want to apply fix for ${green}printing Gcode files from folder ${white}? (${yellow}y${white}/${yellow}n${white}): ${yellow}" yn
         case "${yn}" in
@@ -255,8 +271,22 @@ printing_gcode_from_folder()
                 echo -e "${white}"
                 echo -e "Info: Deleting files..."
                 if [ -f "$KLIPPER_KLIPPY_FOLDER"/gcode.py ]; then
-                    rm -f "$KLIPPER_KLIPPY_FOLDER"/gcode.py
-                    rm -f "$KLIPPER_KLIPPY_FOLDER"/gcode.pyc
+
+                    if [ ! -d "$S_BACKUP_FOLDER"/klippy ]; then
+                        mkdir -p "$S_BACKUP_FOLDER"/klippy
+                    fi
+                    if [ -f "$KLIPPER_KLIPPY_FOLDER"/gcode.py ] && [ ! -L "$KLIPPER_KLIPPY_FOLDER"/gcode.py ]; then
+                        mv -f "$KLIPPER_KLIPPY_FOLDER"/gcode.py "$S_BACKUP_FOLDER"/klippy
+                    fi
+                    if [ -f "$KLIPPER_KLIPPY_FOLDER"/gcode.pyc ] && [ ! -L "$KLIPPER_KLIPPY_FOLDER"/gcode.pyc ]; then
+                        mv -f "$KLIPPER_KLIPPY_FOLDER"/gcode.pyc "$S_BACKUP_FOLDER"/klippy
+                    fi
+                    if [ -f "$KLIPPER_KLIPPY_FOLDER"/gcode.py ]; then
+                        rm -f "$KLIPPER_KLIPPY_FOLDER"/gcode.py
+                    fi
+                    if [ -f "$KLIPPER_KLIPPY_FOLDER"/gcode.pyc ]; then
+                        rm -f "$KLIPPER_KLIPPY_FOLDER"/gcode.pyc
+                    fi
                 fi
                 echo -e "Info: Linking files..."
                 if [ "$PRINTER_MODEL" = "K1" ] || [ "$PRINTER_MODEL" = "K1C" ]; then
@@ -425,7 +455,7 @@ change_camera_settings()
 
 register_action "$(check_klipper_update_allow_action)"'Allow Updating Klipper configuration files' prevent_allow_updating_klipper_files tools 'K1C K1_2025'
 
-register_action 'Fix printing Gcode files from folder' printing_gcode_from_folder tools 'K1 K1C'
+register_action "$(check_printing_gcode_from_folder_menu_action)"'Fix printing Gcode files from folder' printing_gcode_from_folder tools 'K1 K1C'
 
 register_action "$(check_camera_settings_menu_action)"'Camera settings in Moonraker' change_camera_settings tools 'K1 K1C'
 
