@@ -1,6 +1,7 @@
 #!/bin/sh
 
-show_project_information() (
+show_project_information_content()
+(
     project_version=$(git -C "$PROJECT_ROOT" describe --tags --always --dirty 2>/dev/null) || project_version=''
     project_url=$(git -C "$PROJECT_ROOT" config --get remote.origin.url 2>/dev/null) || project_url=''
 
@@ -8,7 +9,8 @@ show_project_information() (
     system_line 'URL:' "${project_url:-Unavailable}"
 )
 
-show_os_information() (
+show_os_information_content()
+(
     detect_system_information
 
     system_line 'System:' "$OS_NAME"
@@ -21,12 +23,13 @@ show_os_information() (
     system_line 'Data disk:' "${SYSTEM_DISK:-Unavailable}"
 )
 
-show_printer_information() (
+show_printer_information_content()
+(
     detect_printer_information
 
     system_line 'Model:' "$PRINTER_MODEL"
     system_line 'Serial number:' "${PRINTER_SN:-Unavailable}"
-    system_line 'Machine Serial number:' "${PRINTER_MACHINE_SN:-Unavailable}"
+    system_line 'Machine SN:' "${PRINTER_MACHINE_SN:-Unavailable}"
     system_line 'Firmware:' "${PRINTER_VERSION:-Unavailable}"
     system_line 'Mainboard:' "${PRINTER_BOARD:-Unavailable}"
     system_line 'IP addresses:' "${PRINTER_IPS:-Unavailable}"
@@ -74,21 +77,33 @@ show_printer_information() (
     info_line "$(check_folder_menu "$EXTRA_MACROS_FOLDER")" 'Extra macros'
 )
 
-show_information() {
+
+
+show_printer_information()
+{
     top_line
     menu_line 'Printer' cyan
     inner_line
-    show_printer_information
-    inner_line
-    menu_line 'OS' cyan
-    inner_line
-    show_os_information
-    inner_line
-    menu_line 'Project' cyan
-    inner_line
-    show_project_information
+    show_printer_information_content
     outer_line
 }
+show_os_information()
+{
+    top_line
+    menu_line 'OS' cyan
+    inner_line
+    show_os_information_content
+    outer_line
+}
+show_project_information()
+{
+    top_line
+    menu_line 'Project' cyan
+    inner_line
+    show_project_information_content
+    outer_line
+}
+
 
 show_packages_information()
 {
@@ -103,6 +118,26 @@ show_packages_information()
     #    #$ENTWARE_FILE list-installed
     #fi
 }
+
+
+
+show_information()
+{
+    top_line
+    menu_line 'Printer' cyan
+    inner_line
+    show_printer_information_content
+    inner_line
+    menu_line 'OS' cyan
+    inner_line
+    show_os_information_content
+    inner_line
+    menu_line 'Project' cyan
+    inner_line
+    show_project_information_content
+    outer_line
+}
+
 
 register_action 'Show all Informations' show_information
 register_action 'Show Printer Informations' show_printer_information

@@ -15,6 +15,7 @@ detect_printer_information() {
                 /usr/data/creality/userdata/config/system_version.json 2>/dev/null) || PRINTER_VERSION=''
             PRINTER_BOARD=$(sed -n 's/.*"hw_version"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' \
                 /usr/data/creality/userdata/config/system_version.json 2>/dev/null) || PRINTER_BOARD=''
+            
             if command -v get_sn_mac.sh >/dev/null 2>&1; then
                 PRINTER_MACHINE_SN=$(get_sn_mac.sh machine_sn 2>/dev/null) || PRINTER_MACHINE_SN=''
                 # PRINTER_BOARD=$(get_sn_mac.sh board 2>/dev/null) || PRINTER_BOARD=''
@@ -38,6 +39,10 @@ detect_printer_information() {
             done
             ;;
     esac
+
+    if [ "$PRINTER_MACHINE_SN" = '0' ]; then
+        PRINTER_MACHINE_SN=''
+    fi
 
     PRINTER_IPS=''
     if command -v ip >/dev/null 2>&1; then
