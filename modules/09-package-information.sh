@@ -23,7 +23,7 @@ detect_package_information() {
 
     for package_name in klipper moonraker fluidd; do
         case "$package_name" in
-            klipper) package_folder=${KLIPPER_FOLDER:-${USR_SHARE:-/usr/share}/klipper} ;;
+            klipper) package_folder=${KLIPPER_FOLDER:-${KLIPPER_KLIPPY_FOLDER:-${USR_SHARE:-/usr/share}/klipper/klippy}/..} ;;
             moonraker) package_folder=${MOONRAKER_FOLDER:+$MOONRAKER_FOLDER/moonraker} ;;
             fluidd) package_folder=${FLUIDD_FOLDER:-} ;;
         esac
@@ -35,6 +35,20 @@ detect_package_information() {
             if [ -z "$package_version" ] && [ -r "$package_folder/.version" ]; then
                 package_version=$(cat "$package_folder/.version" 2>/dev/null) || package_version=''
             fi
+            if [ -z "$package_version" ]; then
+                case "$package_name" in
+                    klipper)
+                        if [ -r "$package_folder/klippy/.version" ]; then
+                            package_version=$(cat "$package_folder/klippy/.version" 2>/dev/null) || package_version=''
+                        fi
+                        ;;
+                    fluidd)
+                        if [ -r "$package_folder/release_info.json" ]; then
+                            package_version=$(sed -n 's/.*"version"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' "$package_folder/release_info.json" 2>/dev/null) || package_version=''
+                        fi
+                        ;;
+                esac
+            fi
         fi
         case "$package_name" in
             klipper) KLIPPER_VERSION=$package_version ;;
@@ -42,4 +56,8 @@ detect_package_information() {
             fluidd) FLUIDD_VERSION=$package_version ;;
         esac
     done
+
+    if [ -z "$KLIPPER_VERSION" ] && [ -n "${PRINTER_DATA_LOG_FOLDER:-}" ] && [ -r "$PRINTER_DATA_LOG_FOLDER/klippy.log" ]; then
+        KLIPPER_VERSION=$(sed -n "s/^Git version: '\([^']*\)'.*/\1/p" "$PRINTER_DATA_LOG_FOLDER/klippy.log" 2>/dev/null | tail -n 1)
+    fi
 }
